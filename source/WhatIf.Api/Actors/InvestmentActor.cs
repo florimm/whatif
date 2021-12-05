@@ -1,53 +1,43 @@
 ﻿using Dapr.Actors;
 using Dapr.Actors.Runtime;
 using Dapr.Client;
-using WhatIf.Api.Models;
+using WhatIf.Api.Commands;
 
 namespace WhatIf.Api.Actors
 {
+    public record InvestmentState(Guid WalletId, string Pair, double Value);
+
     public interface IInvestmentActor : IActor
     {
-        Task Invest(InvestmentRequest investmentRequest);
-
-        Task StopMonitoring();
+        Task Invest(AddInvestmentRequest investmentRequest);
     }
 
-    public class InvestmentActor : Actor, IInvestmentActor, IRemindable
+    public class InvestmentActor : Actor, IInvestmentActor
     {
         private readonly DaprClient daprClient;
+        private InvestmentState? state;
 
         public InvestmentActor(ActorHost host, DaprClient daprClient) : base(host)
         {
             this.daprClient = daprClient;
         }
 
-        public async Task Invest(InvestmentRequest investmentRequest)
+        protected override async Task OnActivateAsync()
         {
             var investmentValue = await StateManager.TryGetStateAsync<InvestmentState>("investment");
-            if (!investmentValue.HasValue || (investmentRequest.Value != investmentValue.Value.Value))
+            state = investmentValue.HasValue ? investmentValue.Value :  null;
+        }
+
+        public async Task Invest(AddInvestmentRequest investmentRequest)
+        {
+            if (state == null || (investmentRequest.Amount != state.Value))
             {
-                Logger.LogInformation($"{Id} investment changed to {investmentRequest.Token} {investmentRequest.Value}");
-                await StateManager.SetStateAsync("investment", new InvestmentState($"{investmentRequest.Token.ToUpper()}USDT", investmentRequest.Value));
+                state = new InvestmentState(investmentRequest.WalletId, $"{investmentRequest.Symbol.ToUpper()}", investmentRequest.Amount);
+                await StateManager.SetStateAsync("investment", state);
                 await StateManager.SaveStateAsync();
-                await RegisterReminderAsync("Request-Price", null, TimeSpan.FromSeconds(1), TimeSpan.FromMinutes(1));
             }
-        }
-
-        public async Task ReceiveReminderAsync(string reminderName, byte[] state, TimeSpan dueTime, TimeSpan period)
-        {
-            if (reminderName == "Request-Price")
-            {
-                var investment = await StateManager.TryGetStateAsync<InvestmentState>("investment");
-                var metadata = new Dictionary<string, string>() { ["path"] = $"price?symbol={investment.Value.Pair.ToUpper()}" };
-                var response = await daprClient.InvokeBindingAsync<object?, BinancePriceResponse>("binance-pair", "get", null, metadata);
-                var calculation = investment.Value.Value / response.Price;
-                await daprClient.PublishEventAsync("calculation", "base-investment-changed", new BaseInvestmentChanged(investment.Value.Pair.ToUpper(), investment.Value.Value, calculation));
-            }
-        }
-
-        public async Task StopMonitoring()
-        {
-            await UnregisterReminderAsync("Request-Price");
+            var proxy = this.ProxyFactory.CreateActorProxy<IPairActor>(new ActorId($"{investmentRequest.Symbol.ToUpper()}"), nameof(PairActor));
+            await proxy.Monitor(new MonitorPairRequest(investmentRequest.Symbol));
         }
     }
 
