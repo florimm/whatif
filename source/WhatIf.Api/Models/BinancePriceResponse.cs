@@ -1,8 +1,4 @@
 ﻿namespace WhatIf.Api.Models
 {
-    public class BinancePriceResponse
-    {
-        public string Symbol { get; set; }
-        public double Price { get; set; } = 0;
-    }
+    public record BinancePriceResponse(string Symbol, double Price = 0);
 }

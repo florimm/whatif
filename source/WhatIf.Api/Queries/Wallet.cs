@@ -12,7 +12,6 @@ namespace WhatIf.Api.Queries
         public string UserId { get; init; }
     }
 
-    //handler
     public class GetAllWalletsForUserQueryHandler : IRequestHandler<GetAllWalletsForUserQuery, GetAllWalletsForUserQueryResult>
     {
         private readonly DaprClient daprClient;
@@ -37,7 +36,6 @@ namespace WhatIf.Api.Queries
         public Guid WalletId { get; init; }
     }
 
-    //handler
     public class GetWalletInvestmentsQueryHandler : IRequestHandler<GetWalletInvestmentsQuery, GetWalletInvestmentsQueryResult>
     {
         private readonly DaprClient daprClient;
