@@ -10,7 +10,7 @@ namespace WhatIf.Api.Commands
     public class CreateWalletRequest : IRequest<Guid>
     {
         public string Name { get; set; }
-        public Guid UserId { get; set; }
+        public string Email { get; set; }
     }
 
     public class CreateWalletHandler : IRequestHandler<CreateWalletRequest, Guid>
@@ -22,21 +22,30 @@ namespace WhatIf.Api.Commands
         }
         public async Task<Guid> Handle(CreateWalletRequest request, CancellationToken cancellationToken)
         {
-            var wallet = new Wallet(Guid.NewGuid(), request.Name, request.UserId, new());
-            await daprClient.SaveStateAsync<Wallet>("db", wallet.Id.ToString(), wallet);
-            return wallet.Id;
+            var userWallets = await daprClient.GetStateAsync<UserWallets>("db", $"{request.Email}-wallets");
+            switch (userWallets)
+            {
+                case null:
+                    userWallets = new UserWallets(request.Email, new List<Wallet> { new Wallet(Guid.NewGuid(), request.Name) });
+                    break;
+                default:
+                    userWallets.Wallets.Add(new Wallet(Guid.NewGuid(), request.Name));
+                    break;
+            }
+            await daprClient.SaveStateAsync<UserWallets>("db", $"{request.Email}-wallets", userWallets);
+            return userWallets.Wallets.Last().Id;
         }
     }
     
     // add investment in wallet
-    public class AddInvestmentRequest : IRequest
+    public class AddInvestmentRequest : IRequest<Investment>
     {
         public Guid WalletId { get; set; }
         public string Symbol { get; set; }
         public double Amount {get; set; }
     }
 
-    public class AddInvestmentHandler : IRequestHandler<AddInvestmentRequest, MediatR.Unit>
+    public class AddInvestmentHandler : IRequestHandler<AddInvestmentRequest, Investment>
     {
         private readonly DaprClient daprClient;
         private readonly IActorProxyFactory actorProxyFactory;
@@ -47,14 +56,20 @@ namespace WhatIf.Api.Commands
             this.actorProxyFactory = actorProxyFactory;
         }
 
-        public async Task<Unit> Handle(AddInvestmentRequest request, CancellationToken cancellationToken)
+        public async Task<Investment> Handle(AddInvestmentRequest request, CancellationToken cancellationToken)
         {
-            var wallet = await daprClient.GetStateAsync<Wallet>("db", request.WalletId.ToString());
-            wallet.Investments.Add(request.Symbol);
-            await daprClient.SaveStateAsync<Wallet>("db", request.WalletId.ToString(), wallet);
-            var proxy = actorProxyFactory.CreateActorProxy<IInvestmentActor>(new ActorId($"{request.WalletId}-{request.Symbol}"), nameof(InvestmentActor));
-            await proxy.Invest(request);
-            return Unit.Value;
+            var wallet = await daprClient.GetStateAsync<WalletInvestments>("db", request.WalletId.ToString());
+            switch (wallet)
+            {
+                case null:
+                    wallet = new WalletInvestments(request.WalletId, new List<Investment> { new Investment(request.Symbol, request.Amount) });
+                    break;
+                default:
+                    wallet.Investments.Add(new Investment(request.Symbol, request.Amount));
+                    break;
+            }
+            await daprClient.SaveStateAsync<WalletInvestments>("db", request.WalletId.ToString(), wallet);
+            return wallet.Investments.Last();
         }
     }
 }
