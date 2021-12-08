@@ -9,7 +9,7 @@ namespace WhatIf.Api.Queries
 
     public class GetAllWalletsForUserQuery : IRequest<GetAllWalletsForUserQueryResult>
     {
-        public string Email { get; init; }
+        public string UserId { get; init; }
     }
 
     //handler
@@ -26,6 +26,31 @@ namespace WhatIf.Api.Queries
         {
             var userWallets = await daprClient.GetStateAsync<UserWallets>("db", $"{request.Email}-wallets");
             return new GetAllWalletsForUserQueryResult(userWallets.Wallets.Select(t => new Wallet(t.Id, t.Name)).ToList());
+        }
+    }
+
+    public record WalletInvestment(string Pair, double Amount);
+    public record GetWalletInvestmentsQueryResult(List<WalletInvestment> Investments);
+
+    public class GetWalletInvestmentsQuery : IRequest<GetWalletInvestmentsQueryResult>
+    {
+        public Guid WalletId { get; init; }
+    }
+
+    //handler
+    public class GetWalletInvestmentsQueryHandler : IRequestHandler<GetWalletInvestmentsQuery, GetWalletInvestmentsQueryResult>
+    {
+        private readonly DaprClient daprClient;
+
+        public GetWalletInvestmentsQueryHandler(DaprClient daprClient)
+        {
+            this.daprClient = daprClient;
+        }
+
+        public async Task<GetWalletInvestmentsQueryResult> Handle(GetWalletInvestmentsQuery request, CancellationToken cancellationToken)
+        {
+            var walletInvestments = await daprClient.GetStateAsync<WalletInvestments>("db", request.WalletId.ToString());
+            return new GetWalletInvestmentsQueryResult(walletInvestments.Investments.Select(t => new WalletInvestment(t.Pair, t.Amount)).ToList());
         }
     }
 

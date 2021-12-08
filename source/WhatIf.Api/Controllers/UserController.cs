@@ -1,11 +1,14 @@
 using Dapr.Client;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WhatIf.Api.Commands;
+using WhatIf.Api.Queries;
 
 namespace WhatIf.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
@@ -19,6 +22,7 @@ namespace WhatIf.Api.Controllers
         }
 
         [HttpPost(Name = "Create")]
+        [AllowAnonymous]
         public async Task<ActionResult<Guid>> Create([FromBody] CreateUserRequest request)
         {
             var result = await mediator.Send(request);
@@ -26,7 +30,22 @@ namespace WhatIf.Api.Controllers
         }
 
         [HttpPost(Name = "Login")]
+        [AllowAnonymous]
         public async Task<ActionResult<Guid>> Login([FromBody] LoginRequest request)
+        {
+            var result = await mediator.Send(request);
+            return Ok(result);
+        }
+
+        [HttpGet(Name = "{userId}/wallets")]
+        public async Task<ActionResult<GetAllWalletsForUserQueryResult>> Wallets([FromQuery] GetAllWalletsForUserQuery request)
+        {
+            var result = await mediator.Send(request);
+            return Ok(result);
+        }
+
+        [HttpGet(Name = "{userId}/wallets/{walletId}/investments")]
+        public async Task<ActionResult<GetAllWalletsForUserQueryResult>> Investments([FromQuery] GetAllWalletsForUserQuery request)
         {
             var result = await mediator.Send(request);
             return Ok(result);
