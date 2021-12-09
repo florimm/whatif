@@ -46,7 +46,7 @@ namespace WhatIf.Api.Actors
             {
                 var metadata = new Dictionary<string, string>() { ["path"] = $"price?symbol={pairSymbol.Value.Symbol}" };
                 var response = await daprClient.InvokeBindingAsync<object?, BinancePriceResponse>("binance-pair", "get", null, metadata);
-                await daprClient.PublishEventAsync("pair-price", "changed", new PairPriceChanged(response.Symbol, response.Price));
+                await daprClient.PublishEventAsync("pubsub", "price-change", new PairPriceChanged(response.Symbol, response.Price));
             }
         }
 
