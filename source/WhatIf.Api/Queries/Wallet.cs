@@ -23,7 +23,7 @@ namespace WhatIf.Api.Queries
 
         public async Task<GetAllWalletsForUserQueryResult> Handle(GetAllWalletsForUserQuery request, CancellationToken cancellationToken)
         {
-            var userWallets = await daprClient.GetStateAsync<UserWallets>("db", $"{request.Email}-wallets");
+            var userWallets = await daprClient.GetStateAsync<UserWallets>("db", $"{request.UserId}-wallets");
             return new GetAllWalletsForUserQueryResult(userWallets.Wallets.Select(t => new Wallet(t.Id, t.Name)).ToList());
         }
     }

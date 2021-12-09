@@ -45,10 +45,17 @@ namespace WhatIf.Api.Controllers
         }
 
         [HttpGet(Name = "{userId}/wallets/{walletId}/investments")]
-        public async Task<ActionResult<GetAllWalletsForUserQueryResult>> Investments([FromQuery] GetAllWalletsForUserQuery request)
+        public async Task<ActionResult<GetWalletInvestmentsQueryResult>> Investments([FromQuery] GetWalletInvestmentsQuery request)
         {
             var result = await mediator.Send(request);
             return Ok(result);
+        }
+
+        [HttpGet(Name = "{userId}/wallets/refresh")]
+        public async Task<ActionResult> Refresh([FromQuery] RefreshForUserAllWalletsRequest request)
+        {
+            await mediator.Send(request);
+            return Ok();
         }
     }
 }
