@@ -21,11 +21,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseCloudEvents();
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-    endpoints.MapHealthChecks("/health");
-});
+app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();
