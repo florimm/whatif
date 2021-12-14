@@ -25,6 +25,7 @@ namespace WhatIf.Api.Controllers
         [HttpPost("/price-change")]
         public async Task<IActionResult> Subscribe(PairPriceChanged data)
         {
+            await Task.CompletedTask;
             // get wallets from state that have pairs same as data then update actors
             
             _logger.LogInformation("PriceChangeController.Subscribe", data);

@@ -9,22 +9,8 @@ namespace WhatIf.Api.Actors
     public record PairPriceChanged(string Pair, double Price);
     public record MonitorPairRequest(string Symbol, int RefreshIntervalInSeconds = 60);
     
-    public class PairState
-    {
-        public PairState()
-        {
-            this.CallbackActorRef = new List<string>();
-        }
-        public string Symbol { get; set; }
-
-        public List<string> CallbackActorRef { get; set; }
-        public int RefreshIntervalInSeconds { get; set; }
-        
-        public bool AreEquals(MonitorPairRequest request)
-        {
-            return request.Symbol == Symbol && request.RefreshIntervalInSeconds == RefreshIntervalInSeconds;
-        }
-    }
+    public record PairState(string Symbol, int RefreshIntervalInSeconds);
+    
     public interface IPairActor : IActor
     {
         Task Monitor(MonitorPairRequest request);

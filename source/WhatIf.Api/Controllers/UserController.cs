@@ -3,6 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WhatIf.Api.Commands;
+using WhatIf.Api.Commands.User;
+using WhatIf.Api.Commands.Wallet;
 using WhatIf.Api.Queries;
 
 namespace WhatIf.Api.Controllers

@@ -7,10 +7,7 @@ namespace WhatIf.Api.Queries
     public record Wallet(Guid Id, string Name);
     public record GetAllWalletsForUserQueryResult(List<Wallet> Wallets);
 
-    public class GetAllWalletsForUserQuery : IRequest<GetAllWalletsForUserQueryResult>
-    {
-        public string UserId { get; init; }
-    }
+    public record GetAllWalletsForUserQuery(string UserId) : IRequest<GetAllWalletsForUserQueryResult>;
 
     public class GetAllWalletsForUserQueryHandler : IRequestHandler<GetAllWalletsForUserQuery, GetAllWalletsForUserQueryResult>
     {
