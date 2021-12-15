@@ -1,6 +1,8 @@
+using CSharpFunctionalExtensions;
 using Dapr.Client;
 using MediatR;
 using WhatIf.Api.States;
+using WhatIf.Api.Utils;
 
 namespace WhatIf.Api.Commands.User
 {
@@ -17,7 +19,7 @@ namespace WhatIf.Api.Commands.User
         public async Task<Guid> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
             var user = await daprClient.GetStateAsync<WhatIf.Api.States.User>("db", request.Email);
-            if (user == null || user.Password != request.Password)
+            if (user == null || user.Password.Crypt() != request.Password)
             {
                 return Guid.Empty;
             }
