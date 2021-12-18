@@ -15,7 +15,7 @@ RUN npm run build
 # Stage 1
 # Production build based on Nginx with artefacts from Stage 0
 FROM nginx:1.21.4-alpine
-COPY config/nginx.conf /etc/nginx/conf.d/default.conf
+COPY ngnix/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
