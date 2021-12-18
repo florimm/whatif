@@ -23,13 +23,15 @@ namespace WhatIf.Api.Commands.Wallet
         public async Task<Investment> Handle(AddInvestmentRequest request, CancellationToken cancellationToken)
         {
             var wallet = await daprClient.GetStateAsync<WalletInvestments>("db", request.WalletId.ToString());
+            //patern matching
+            var investment = new Investment(request.Symbol, request.Amount);
             switch (wallet)
             {
                 case null:
-                    wallet = new WalletInvestments(request.WalletId, new List<Investment> { new Investment(request.Symbol, request.Amount) });
+                    wallet = new WalletInvestments(request.WalletId, new List<Investment> { investment });
                     break;
                 default:
-                    wallet.Investments.Add(new Investment(request.Symbol, request.Amount));
+                    wallet.Investments.Add(investment);
                     break;
             }
             await daprClient.SaveStateAsync<WalletInvestments>("db", request.WalletId.ToString(), wallet);
