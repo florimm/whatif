@@ -6,7 +6,7 @@ function View() {
     return (
       <Routes>
         <Route path="/" element={<List />} />
-        <Route path="/:id" element={<Details />} />
+        <Route path="/:walletId" element={<Details />} />
       </Routes>
     );
 }
