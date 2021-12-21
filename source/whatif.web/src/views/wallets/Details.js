@@ -1,9 +1,13 @@
 import { useParams, Link } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
+import PullToRefresh from 'react-simple-pull-to-refresh';
 
 export default function Details() {
     const { walletId } = useParams();
-    const { isLoading, data } = useQuery(['walletDetail', walletId], async () => {
+    const queryClient = useQueryClient();
+
+    const { isLoading, data } = useQuery(['walletDetail', walletId], async (data) => {
+        console.log('data =>', data);
         const response = await Promise.resolve({
             id: walletId,
             name: walletId === '1' ? 'Main wallet' : 'Secondary wallet',
@@ -12,17 +16,21 @@ export default function Details() {
         return response;
     });
 
+    const handleRefresh = () => {
+        return queryClient.invalidateQueries(['walletDetail', walletId]);
+    };
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
 
     return (
-        <div>
-            <h1>Wallet: {data.name}</h1>
+        <PullToRefresh onRefresh={handleRefresh}>
+            <h1>Wallet: {data.name}</h1>                
             <ul className="list-group">
                 {data.pairs.map(pair => (<li key={pair.pair}> {pair.pair} {pair.value}</li>))}
             </ul>
             <Link to="..">Back</Link>
-        </div>
+        </PullToRefresh>
     );
 }
