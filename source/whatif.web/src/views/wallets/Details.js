@@ -26,10 +26,19 @@ export default function Details() {
 
     return (
         <PullToRefresh onRefresh={handleRefresh}>
-            <h1>Wallet: {data.name}</h1>                
-            <ul className="list-group">
-                {data.pairs.map(pair => (<li key={pair.pair}> {pair.pair} {pair.value}</li>))}
-            </ul>
+            <h1>Wallet: {data.name}</h1>   
+            {
+                data.pairs.map(pair => (<Link key={pair.pair} to={`/investment/${pair.id}`} className="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" className="rounded-circle flex-shrink-0" />
+                <div className="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                    <h6 className="mb-0">{pair.pair}</h6>
+                    <p className="mb-0 opacity-75">{pair.description || ''}</p>
+                </div>
+                <small className="opacity-50 text-nowrap">{pair.value} $</small>
+                </div>
+            </Link>
+                ))}
             <Link to="..">Back</Link>
         </PullToRefresh>
     );
