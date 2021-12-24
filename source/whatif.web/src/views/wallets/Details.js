@@ -1,6 +1,8 @@
+import React from 'react';
 import { useParams, Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
 import PullToRefresh from 'react-simple-pull-to-refresh';
+import { Icon } from '@iconify/react';
 
 export default function Details() {
     const { walletId } = useParams();
@@ -11,7 +13,7 @@ export default function Details() {
         const response = await Promise.resolve({
             id: walletId,
             name: walletId === '1' ? 'Main wallet' : 'Secondary wallet',
-            pairs: [{ pair: 'USDTETH', value: 4000 }, { pair: 'USDTBTC', value: 77000 }]
+            pairs: [{ pair: 'USDTETH', value: 4000, from:"usdt", to: "eth" }, { pair: 'USDTBTC', value: 77000, from:"usdt", to: "btc" }]
         });
         return response;
     });
@@ -29,7 +31,7 @@ export default function Details() {
             <h1>Wallet: {data.name}</h1>   
             {
                 data.pairs.map(pair => (<Link key={pair.pair} to={`/investment/${pair.id}`} className="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-                <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" className="rounded-circle flex-shrink-0" />
+                <Icon icon={`cryptocurrency:${pair.from}`} /><Icon icon={`cryptocurrency:${pair.to}`} />
                 <div className="d-flex gap-2 w-100 justify-content-between">
                 <div>
                     <h6 className="mb-0">{pair.pair}</h6>

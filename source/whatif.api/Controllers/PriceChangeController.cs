@@ -23,13 +23,18 @@ namespace WhatIf.Api.Controllers
         }
 
         [HttpPost("/price-change")]
-        public async Task<IActionResult> Subscribe(PairPriceChanged data)
+        public async Task<ActionResult> Subscribe(PairPriceChanged data)
         {
-            await Task.CompletedTask;
-            // get wallets from state that have pairs same as data then update actors
-            
+            await _daprClient.SaveStateAsync<PairPriceChanged>("db", data.Pair.ToUpper(), data);
             _logger.LogInformation("PriceChangeController.Subscribe", data);
             return Ok();
+        }
+
+        [HttpGet("/pair-price")]
+        public async Task<ActionResult> GetPairPrice(string pair)
+        {
+            var result = await _daprClient.GetStateAsync<PairPriceChanged>("db", pair.ToUpper());
+            return Ok(result);
         }
     }
 

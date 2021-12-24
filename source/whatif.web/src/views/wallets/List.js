@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
-import PullToRefresh from 'react-simple-pull-to-refresh';
+import { Icon } from '@iconify/react';
+import PullToRefresh from "react-simple-pull-to-refresh";
 
 export default function List() {
     const queryClient = useQueryClient();
@@ -22,8 +23,9 @@ export default function List() {
             <div className="list-group">
             <h1>Wallet list</h1>
             {
-                data.map(wallet => (<Link key={wallet.id} to={`/wallets/${wallet.id}`} className="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
-                    <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" className="rounded-circle flex-shrink-0" />
+                data.map(wallet => (
+                <Link key={wallet.id} to={`/wallets/${wallet.id}`} className="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                    <Icon icon="ant-design:wallet-filled" />
                     <div className="d-flex gap-2 w-100 justify-content-between">
                     <div>
                         <h6 className="mb-0">{wallet.name}</h6>
