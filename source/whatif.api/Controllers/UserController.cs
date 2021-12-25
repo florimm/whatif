@@ -22,7 +22,7 @@ namespace WhatIf.Api.Controllers
             _logger = logger;
         }
 
-        [HttpPost(Name = "Create")]
+        [HttpPost()]
         [AllowAnonymous]
         public async Task<ActionResult<Guid>> Create([FromBody] CreateUserRequest request)
         {
@@ -30,7 +30,7 @@ namespace WhatIf.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost(Name = "Login")]
+        [HttpPost("/Login")]
         [AllowAnonymous]
         public async Task<ActionResult<Guid>> Login([FromBody] LoginRequest request)
         {
@@ -38,21 +38,21 @@ namespace WhatIf.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet(Name = "{userId}/wallets")]
+        [HttpGet("{userId}/wallets")]
         public async Task<ActionResult<GetAllWalletsForUserQueryResult>> Wallets([FromQuery] GetAllWalletsForUserQuery request)
         {
             var result = await mediator.Send(request);
             return Ok(result);
         }
 
-        [HttpGet(Name = "{userId}/wallets/{walletId}/investments")]
+        [HttpGet("{userId}/wallets/{walletId}/investments")]
         public async Task<ActionResult<GetWalletInvestmentsQueryResult>> Investments([FromQuery] GetWalletInvestmentsQuery request)
         {
             var result = await mediator.Send(request);
             return Ok(result);
         }
 
-        [HttpGet(Name = "{userId}/wallets/refresh")]
+        [HttpGet("{userId}/wallets/refresh")]
         public async Task<ActionResult> Refresh([FromQuery] RefreshForUserAllWalletsRequest request)
         {
             await mediator.Send(request);
