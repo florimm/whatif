@@ -22,7 +22,7 @@ namespace WhatIf.Api.Commands.Wallet
 
         public async Task<Investment> Handle(AddInvestmentRequest request, CancellationToken cancellationToken)
         {
-            var wallet = await daprClient.GetStateAsync<WalletInvestments>("db", request.WalletId.ToString());
+            var wallet = await daprClient.GetStateAsync<WalletInvestments>("statestore", request.WalletId.ToString());
             //patern matching
             var investment = new Investment(request.Symbol, request.From, request.To, request.Value, request.Amount);
             switch (wallet)
@@ -34,7 +34,7 @@ namespace WhatIf.Api.Commands.Wallet
                     wallet.Investments.Add(investment);
                     break;
             }
-            await daprClient.SaveStateAsync<WalletInvestments>("db", request.WalletId.ToString(), wallet);
+            await daprClient.SaveStateAsync<WalletInvestments>("statestore", request.WalletId.ToString(), wallet);
             var proxy = actorProxyFactory.CreateActorProxy<IPairActor>(new ActorId($"{request.Symbol.ToUpper()}"), nameof(PairActor));
             await proxy.Monitor(new MonitorPairRequest(request.Symbol));
             return wallet.Investments.Last();

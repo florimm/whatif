@@ -18,7 +18,7 @@ namespace WhatIf.Api.Commands.User
         
         public async Task<Guid> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
-            var user = await daprClient.GetStateAsync<WhatIf.Api.States.User>("db", request.Email);
+            var user = await daprClient.GetStateAsync<WhatIf.Api.States.User>("statestore", request.Email);
             if (user == null || user.Password.Crypt() != request.Password)
             {
                 return Guid.Empty;

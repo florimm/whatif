@@ -21,7 +21,7 @@ namespace WhatIf.Api.Queries.Wallet
 
         public async Task<GetWalletInvestmentsQueryResult> Handle(GetWalletInvestmentsQuery request, CancellationToken cancellationToken)
         {
-            var walletInvestments = await daprClient.GetStateAsync<WalletInvestments>("db", request.WalletId.ToString());
+            var walletInvestments = await daprClient.GetStateAsync<WalletInvestments>("statestore", request.WalletId.ToString());
             return new GetWalletInvestmentsQueryResult(
                 walletInvestments.Investments.Select(t => new WalletInvestment(t.Pair, t.From, t.To, t.Amount)).ToList());
         }

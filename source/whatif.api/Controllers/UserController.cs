@@ -30,7 +30,14 @@ namespace WhatIf.Api.Controllers
             return Ok(result);
         }
 
-        [HttpPost("/Login")]
+        [HttpGet()]
+        [AllowAnonymous]
+        public ActionResult<Guid> Data()
+        {
+            return Ok(Guid.NewGuid());
+        }
+
+        [HttpPost("login")]
         [AllowAnonymous]
         public async Task<ActionResult<Guid>> Login([FromBody] LoginRequest request)
         {

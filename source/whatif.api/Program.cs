@@ -27,13 +27,14 @@ builder.Services.AddActors(config => {
     config.Actors.RegisterActor<PairActor>();
     config.ActorIdleTimeout = TimeSpan.FromMinutes(20);
 });
-builder.Services.AddDaprSidekick(builder.Configuration, c => {
-    c.Sidecar ??= new Man.Dapr.Sidekick.DaprSidecarOptions();
-    // c.Sidecar.AppId = "whatifapi";
-    c.Sidecar.ComponentsDirectory = @"C:\projects\what-if\source\whatif.api\dapr\components";
-    c.Sidecar.LogLevel = "Debug";
-    c.Sidecar.AllowedOrigins = "*";
-});
+// builder.Services.AddDaprSidekick(builder.Configuration, c => {
+//     c.Sidecar ??= new Man.Dapr.Sidekick.DaprSidecarOptions();
+//     // c.Sidecar.AppId = "whatifapi";
+//     c.Sidecar.ComponentsDirectory = @"C:\projects\what-if\source\whatif.api\dapr\components";
+//     c.Sidecar.LogLevel = "Debug";
+//     c.Sidecar.AppId = "whatifapi";
+//     c.Sidecar.AllowedOrigins = "*";
+// });
 
 var app = builder.Build();
 

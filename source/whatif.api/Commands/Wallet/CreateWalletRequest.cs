@@ -18,7 +18,7 @@ namespace WhatIf.Api.Commands.Wallet
         }
         public async Task<Guid> Handle(CreateWalletRequest request, CancellationToken cancellationToken)
         {
-            var userWallets = await daprClient.GetStateAsync<UserWallets>("db", $"{request.Email}-wallets");
+            var userWallets = await daprClient.GetStateAsync<UserWallets>("statestore", $"{request.Email}-wallets");
             switch (userWallets)
             {
                 case null:
@@ -28,7 +28,7 @@ namespace WhatIf.Api.Commands.Wallet
                     userWallets.Wallets.Add(new WhatIf.Api.States.Wallet(Guid.NewGuid(), request.Name));
                     break;
             }
-            await daprClient.SaveStateAsync<UserWallets>("db", $"{request.Email}-wallets", userWallets);
+            await daprClient.SaveStateAsync<UserWallets>("statestore", $"{request.Email}-wallets", userWallets);
             return userWallets.Wallets.Last().Id;
         }
     }

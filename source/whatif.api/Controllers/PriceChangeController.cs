@@ -1,3 +1,4 @@
+using Dapr;
 using Dapr.Actors.Client;
 using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
@@ -22,18 +23,19 @@ namespace WhatIf.Api.Controllers
             _actorProxyFactory = actorProxyFactory;
         }
 
-        [HttpPost("/price-change")]
+        [HttpPost("price-change")]
+        [Topic("pubsub", "price-change")]
         public async Task<ActionResult> Subscribe(PairPriceChanged data)
         {
-            await _daprClient.SaveStateAsync<PairPriceChanged>("db", data.Pair.ToUpper(), data);
+            await _daprClient.SaveStateAsync<PairPriceChanged>("statestore", data.Pair.ToUpper(), data);
             _logger.LogInformation("PriceChangeController.Subscribe", data);
             return Ok();
         }
 
-        [HttpGet("/pair-price")]
+        [HttpGet("pair-price")]
         public async Task<ActionResult> GetPairPrice(string pair)
         {
-            var result = await _daprClient.GetStateAsync<PairPriceChanged>("db", pair.ToUpper());
+            var result = await _daprClient.GetStateAsync<PairPriceChanged>("statestore", pair.ToUpper());
             return Ok(result);
         }
     }
