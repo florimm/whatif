@@ -1,0 +1,21 @@
+GET http://dapr-app-id:whatifapi@localhost:3602/user HTTP/1.1
+
+###
+POST http://localhost:3602/v1.0/invoke/whatifapi/method/user HTTP/1.1
+content-type: application/json
+
+{
+    "email": "filon.fisteku@gmail.com",
+    "password": "123456",
+    "firstName": "filon",
+    "lastName": "fisteku"
+}
+
+###
+POST http://localhost:3602/v1.0/invoke/whatifapi/method/user/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "filon.fisteku@gmail.com",
+    "password": "123456"
+}
