@@ -11,9 +11,9 @@ namespace WhatIf.Api.Commands.Wallet
 
     public class RefreshForUserAllWalletsHandler : IRequestHandler<RefreshForUserAllWalletsRequest>
     {
-        private readonly ActorProxyFactory actorProxyFactory;
+        private readonly IActorProxyFactory actorProxyFactory;
         private readonly DaprClient daprClient;
-        public RefreshForUserAllWalletsHandler(DaprClient daprClient, ActorProxyFactory actorProxyFactory)
+        public RefreshForUserAllWalletsHandler(DaprClient daprClient, IActorProxyFactory actorProxyFactory)
         {
             this.daprClient = daprClient;
             this.actorProxyFactory = actorProxyFactory;
