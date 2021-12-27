@@ -3,7 +3,7 @@ using Microsoft.OpenApi.Models;
 using WhatIf.Api.Actors;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls("http://localhost:5178");
+builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5178));
 var allowDaprForSwagger = "allowDaprForSwagger";
 
 builder.Services.AddCors(options =>
