@@ -14,7 +14,6 @@
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-    <PackageReference Include="Man.Dapr.Sidekick.AspNetCore" Version="1.1.0" />
   </ItemGroup>
 
 </Project>
