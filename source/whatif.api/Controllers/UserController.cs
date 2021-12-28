@@ -31,15 +31,15 @@ namespace WhatIf.Api.Controllers
         }
 
         [HttpGet()]
-        [AllowAnonymous]
-        public ActionResult<Guid> Data()
+        [Authorize]
+        public ActionResult Data()
         {
-            return Ok(Guid.NewGuid());
+            return Ok(this.HttpContext.User);
         }
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<Guid>> Login([FromBody] LoginRequest request)
+        public async Task<ActionResult<string>> Login([FromBody] LoginRequest request)
         {
             var result = await mediator.Send(request);
             return Ok(result);
