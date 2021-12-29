@@ -1,14 +1,23 @@
+const baseUrl = `http://localhost:3602/v1.0/invoke/whatifapi/method`;
 export async function postData(url = '', data = {}) {
-    const response = await fetch(url, {
+    const response = await fetch(`${baseUrl}/${url}`, {
         method: 'POST',
-        // mode: 'cors', // no-cors, *cors, same-origin
-        // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        // credentials: 'same-origin', // include, *same-origin, omit
         headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('token')
         },
         body: JSON.stringify(data)
+    });
+    return response.json();
+}
+
+export async function getData(url = '') {
+    const response = await fetch(`${baseUrl}/${url}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
     });
     return response.json();
 }

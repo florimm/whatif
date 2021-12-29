@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
 import PullToRefresh from 'react-simple-pull-to-refresh';
+import { Modal, Button } from 'react-bootstrap';
 import { Icon } from '@iconify/react';
 
 export default function Details() {
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     const { walletId } = useParams();
     const queryClient = useQueryClient();
 
-    const { isLoading, data } = useQuery(['walletDetail', walletId], async (data) => {
-        console.log('data =>', data);
+    const { isLoading, data } = useQuery(['walletDetail', walletId], async () => {
         const response = await Promise.resolve({
             id: walletId,
             name: walletId === '1' ? 'Main wallet' : 'Secondary wallet',
@@ -40,8 +44,9 @@ export default function Details() {
     }
 
     return (
+        <>
         <PullToRefresh onRefresh={handleRefresh}>
-            <h1>Wallet: {data.name}</h1>
+            <h1>Wallet: {data.name}</h1><button onClick={handleShow}>Edit</button>
             <div className="list-group-item list-group-item-action d-flex gap-4 py-3" aria-current="true">
                 <div className="d-flex gap-2 w-100 justify-content-between">
                     <div>
@@ -56,6 +61,21 @@ export default function Details() {
             }
             <Link to="..">Back</Link>
         </PullToRefresh>
+        <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+            <Modal.Title>Modal heading</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+                Close
+            </Button>
+            <Button variant="primary" onClick={handleClose}>
+                Save Changes
+            </Button>
+            </Modal.Footer>
+        </Modal>
+        </>
     );
 }
 

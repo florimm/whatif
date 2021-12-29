@@ -26,3 +26,8 @@ content-type: application/json
 GET http://localhost:3602/v1.0/invoke/whatifapi/method/user HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
+
+GET http://localhost:3602/v1.0/invoke/whatifapi/method/user/35a8b18b-2b59-4002-958d-65879331b713/wallets
+Authorization: Bearer {{authToken}}
+###
+

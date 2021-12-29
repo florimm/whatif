@@ -52,7 +52,7 @@ namespace WhatIf.Api.Controllers
         }
 
         [HttpGet("{userId}/wallets")]
-        public async Task<ActionResult<GetAllWalletsForUserQueryResult>> Wallets([FromQuery] GetAllWalletsForUserQuery request)
+        public async Task<ActionResult<GetAllWalletsForUserQueryResult>> Wallets([FromRoute] GetAllWalletsForUserQuery request)
         {
             var result = await mediator.Send(request);
             return Ok(result);

@@ -7,7 +7,7 @@ using WhatIf.Api.States;
 
 namespace WhatIf.Api.Commands.Wallet
 {
-    public record RefreshForUserAllWalletsRequest(string Email) : IRequest;
+    public record RefreshForUserAllWalletsRequest(string UserId) : IRequest;
 
     public class RefreshForUserAllWalletsHandler : IRequestHandler<RefreshForUserAllWalletsRequest>
     {
@@ -20,7 +20,7 @@ namespace WhatIf.Api.Commands.Wallet
         }
         public async Task<Unit> Handle(RefreshForUserAllWalletsRequest request, CancellationToken cancellationToken)
         {
-            var userWallets = await daprClient.GetStateAsync<UserWallets>("statestore", $"{request.Email}-wallets");
+            var userWallets = await daprClient.GetStateAsync<UserWallets>("statestore", $"{request.UserId}-wallets");
             if (userWallets != null)
             {
                 var investmentsPairs = new List<string>();
