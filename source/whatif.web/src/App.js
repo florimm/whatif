@@ -7,6 +7,8 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import Home from './views/home';
 import Wallets from './views/wallets';
 import About from './views/about';
+import Login from './views/login';
+import { RequireAuth, AuthProvider } from './views/login/RequireAuth';
 import NotFound from './views/not-found';
 import './App.css';
 
@@ -16,14 +18,17 @@ function App() {
     <QueryClientProvider client={queryClient}>
         <div className="App">
           <div className="App-intro">
-            <Routes>
-              <Route path="/">
-                <Route index element={<Home />} />
-                <Route path="about" element={<About />} />
-                <Route path="wallets/*" element={<Wallets />} />
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
+            <AuthProvider>
+              <Routes>
+                <Route path="/">
+                  <Route index element={<Home />} />
+                  <Route path="login" element={<Login />} />
+                  <Route path="about" element={<About />} />
+                  <Route path="wallets/*" element={<RequireAuth><Wallets /></RequireAuth>} />
+                  <Route path="*" element={<NotFound />} />
+                </Route>
+              </Routes>
+            </AuthProvider>
           </div>
         </div>
         <ReactQueryDevtools initialIsOpen={false} />

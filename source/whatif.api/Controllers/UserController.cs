@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using CSharpFunctionalExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -34,12 +35,17 @@ namespace WhatIf.Api.Controllers
         [Authorize]
         public ActionResult Data()
         {
-            return Ok(this.HttpContext.User);
+            var identity = this.HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null)
+            {
+                return Ok(identity.Claims.FirstOrDefault(t => t.Type == ClaimTypes.NameIdentifier)?.Value);
+            }
+            return Ok("No data");
         }
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<string>> Login([FromBody] LoginRequest request)
+        public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
         {
             var result = await mediator.Send(request);
             return Ok(result);

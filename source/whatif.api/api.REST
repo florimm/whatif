@@ -1,6 +1,4 @@
-GET http://localhost:3602/v1.0/invoke/whatifapi/method/user HTTP/1.1
-Authorization: eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJmaWxvbi5maXN0ZWt1QGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiMzVhOGIxOGItMmI1OS00MDAyLTk1OGQtNjU4NzkzMzFiNzEzIiwiZXhwIjoxNjQwNjUxNjU2LCJpc3MiOiJ3d3cud2hhdGlmLm5ldCIsImF1ZCI6Ind3dy53aGF0aWYubmV0In0._PoIMQM6zdhfkqB0xEHGSNFlNlLbMYaTJWfuS2FAa6k
-###
+
 POST http://localhost:3602/v1.0/invoke/whatifapi/method/user HTTP/1.1
 content-type: application/json
 
@@ -12,6 +10,8 @@ content-type: application/json
 }
 
 ###
+
+# @name login
 POST http://localhost:3602/v1.0/invoke/whatifapi/method/user/login HTTP/1.1
 content-type: application/json
 
@@ -19,3 +19,10 @@ content-type: application/json
     "email": "filon.fisteku@gmail.com",
     "password": "123456"
 }
+###
+
+@authToken = {{login.response.body.token}}
+
+GET http://localhost:3602/v1.0/invoke/whatifapi/method/user HTTP/1.1
+Authorization: Bearer {{authToken}}
+###

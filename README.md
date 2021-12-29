@@ -16,10 +16,12 @@ The goals of this app are:
 
 ## Running the app
 * Command to run API (from the whatif.api folder):
-    ```dapr run --app-id whatifapi --app-port 7178 --dapr-http-port 3602 --dapr-grpc-port 60002 --app-ssl --log-level Debug --components-path C:\projects\what-if\source\whatif.api\dapr\components dotnet run```
+    ```dapr run --app-id whatifapi --app-port 5178 --dapr-http-port 3602 --dapr-grpc-port 60002 --log-level Debug --components-path C:\projects\what-if\source\whatif.api\dapr\components dotnet run```
 * Command to run frontend (from the whatif.web folder):
     ```yarn start``` or ```npm run start```
 
-## Swagger
+## Testing endpoints
 * Accessing swagger:
     ```http://localhost:5178/swagger/index.html```
+* Rest client in VsCode
+    - check file api.Rest in the api project

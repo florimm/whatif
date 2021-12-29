@@ -7,9 +7,11 @@ using WhatIf.Api.Utils;
 
 namespace WhatIf.Api.Commands.User
 {
-    public record LoginRequest(string Email, string Password) : IRequest<string>;
+    public record LoginRequest(string Email, string Password) : IRequest<LoginResponse>;
+
+    public record LoginResponse(string Token, string userName);
     
-    public class LoginHandler : IRequestHandler<LoginRequest, string>
+    public class LoginHandler : IRequestHandler<LoginRequest, LoginResponse>
     {
         private readonly DaprClient daprClient;
         private readonly ITokenService tokenService;
@@ -20,7 +22,7 @@ namespace WhatIf.Api.Commands.User
             this.tokenService = tokenService;
         }
         
-        public async Task<string> Handle(LoginRequest request, CancellationToken cancellationToken)
+        public async Task<LoginResponse> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
             var user = await daprClient.GetStateAsync<WhatIf.Api.States.User>("statestore", request.Email);
             if (user == null || user.Password != request.Password.Crypt())
@@ -28,7 +30,7 @@ namespace WhatIf.Api.Commands.User
                 throw new UnauthorizedAccessException("Invalid credentials");
             }
             var token = tokenService.BuildToken(user.Id, user.Email);
-            return token;
+            return new LoginResponse(token, user.Email);
         }
     }
 }

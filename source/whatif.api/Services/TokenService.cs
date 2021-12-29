@@ -26,7 +26,8 @@ namespace WhatIf.Api.Services
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email, email),
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString())
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                new Claim(ClaimTypes.Role, "WalletUser")
             };
     
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
