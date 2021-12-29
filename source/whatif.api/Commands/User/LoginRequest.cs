@@ -9,7 +9,7 @@ namespace WhatIf.Api.Commands.User
 {
     public record LoginRequest(string Email, string Password) : IRequest<LoginResponse>;
 
-    public record LoginResponse(string Token, string userName);
+    public record LoginResponse(string Token, string UserName);
     
     public class LoginHandler : IRequestHandler<LoginRequest, LoginResponse>
     {

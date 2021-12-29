@@ -58,6 +58,20 @@ namespace WhatIf.Api.Controllers
             return Ok(result);
         }
 
+        [HttpPost("{userId}/wallets")]
+        public async Task<ActionResult<Guid>> CreateWallet([FromBody] CreateWalletRequest request)
+        {
+            var result = await mediator.Send(request);
+            return Ok(result);
+        }
+
+        [HttpPost("{userId}/wallets/{walletId}")]
+        public async Task<ActionResult> UpdateWallet([FromBody] UpdateWalletRequest request)
+        {
+            await mediator.Send(request);
+            return Ok();
+        }
+
         [HttpGet("{userId}/wallets/{walletId}/investments")]
         public async Task<ActionResult<GetWalletInvestmentsQueryResult>> Investments([FromQuery] GetWalletInvestmentsQuery request)
         {
