@@ -2,7 +2,7 @@ import {
     useNavigate,
     useLocation,
 } from "react-router-dom";
-import { useAuth } from "./RequireAuth";
+import { useAuth } from "../../components/useAuth";
 
 function Login() {
     let navigate = useNavigate();
@@ -34,20 +34,22 @@ function Login() {
         )
     }
     return (
-        <div>
-            <h1>Login</h1>
-            <form onSubmit={tryToLogin}>
-                <div className="form-group">
-                    <label htmlFor="email">Email address</label>
-                    <input type="email" className="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email" />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input type="password" className="form-control" name="password" id="password" placeholder="Password" />
-                </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
-            </form>
-        </div>
+        <main className="form-signin">
+        <form onSubmit={tryToLogin}>
+            {/* <img className="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57" /> */}
+            <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
+            <div className="form-floating">
+            <input type="email" className="form-control" id="floatingInput" name="email" placeholder="name@example.com" />
+            <label htmlFor="floatingInput">Email address</label>
+            </div>
+            <div className="form-floating">
+            <input type="password" className="form-control" id="floatingPassword" name="password" placeholder="Password" />
+            <label htmlFor="floatingPassword">Password</label>
+            </div>
+            <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+            <p className="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+        </form>
+        </main>
     );
 }
 
