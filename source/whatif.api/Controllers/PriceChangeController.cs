@@ -32,7 +32,7 @@ namespace WhatIf.Api.Controllers
             return Ok();
         }
 
-        [HttpGet("pair-price")]
+        [HttpGet("pair-price/{pair}")]
         public async Task<ActionResult> GetPairPrice(string pair)
         {
             var result = await _daprClient.GetStateAsync<PairPriceChanged>("statestore", pair.ToUpper());

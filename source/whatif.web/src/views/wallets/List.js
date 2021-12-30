@@ -15,7 +15,7 @@ export default function List() {
     const handleShow = () => setShow(true);
     const queryClient = useQueryClient();
 
-    const { isLoading, data } = useQuery(['walletList', userId], async () => {
+    const { isLoading, data } = useQuery(['walletList', userId], () => {
         return getData(`users/${userId}/wallets`);
     });
 
@@ -29,6 +29,7 @@ export default function List() {
 
     const saveWallet = wallet => {
         mutation.mutate({ ...wallet });
+        handleClose();
     }
 
     const handleRefresh = () => {
@@ -70,15 +71,9 @@ export default function List() {
             <Modal.Header closeButton>
             <Modal.Title>Create new wallet</Modal.Title>
             </Modal.Header>
-            <Modal.Body><WalletForm onSave={saveWallet} /></Modal.Body>
-            <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-                Close
-            </Button>
-            <Button variant="primary" onClick={handleClose}>
-                Save Changes
-            </Button>
-            </Modal.Footer>
+            <Modal.Body>
+                <WalletForm onSave={saveWallet} onCancel={handleClose} />
+            </Modal.Body>
         </Modal>
         </>
     );

@@ -31,18 +31,6 @@ namespace WhatIf.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet()]
-        [Authorize]
-        public ActionResult Data()
-        {
-            var identity = this.HttpContext.User.Identity as ClaimsIdentity;
-            if (identity != null)
-            {
-                return Ok(identity.Claims.FirstOrDefault(t => t.Type == ClaimTypes.NameIdentifier)?.Value);
-            }
-            return Ok("No data");
-        }
-
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
