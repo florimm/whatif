@@ -1,5 +1,3 @@
-using System.Security.Claims;
-using CSharpFunctionalExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +10,12 @@ namespace WhatIf.Api.Controllers
     [ApiController]
     [Authorize]
     [Route("[controller]")]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly IMediator mediator;
-        private readonly ILogger<UserController> _logger;
+        private readonly ILogger<UsersController> _logger;
 
-        public UserController(IMediator mediator, ILogger<UserController> logger)
+        public UsersController(IMediator mediator, ILogger<UsersController> logger)
         {
             this.mediator = mediator;
             _logger = logger;
@@ -42,6 +40,7 @@ namespace WhatIf.Api.Controllers
         [HttpGet("{userId}/wallets")]
         public async Task<ActionResult<GetAllWalletsForUserQueryResult>> Wallets([FromRoute] GetAllWalletsForUserQuery request)
         {
+            System.Console.WriteLine($"UserId ======> : {request.UserId}");
             var result = await mediator.Send(request);
             return Ok(result);
         }
@@ -61,14 +60,14 @@ namespace WhatIf.Api.Controllers
         }
 
         [HttpGet("{userId}/wallets/{walletId}/investments")]
-        public async Task<ActionResult<GetWalletInvestmentsQueryResult>> Investments([FromQuery] GetWalletInvestmentsQuery request)
+        public async Task<ActionResult<GetWalletInvestmentsQueryResult>> Investments([FromRoute] GetWalletInvestmentsQuery request)
         {
             var result = await mediator.Send(request);
             return Ok(result);
         }
 
         [HttpGet("{userId}/wallets/refresh")]
-        public async Task<ActionResult> Refresh([FromQuery] RefreshForUserAllWalletsRequest request)
+        public async Task<ActionResult> Refresh([FromRoute] RefreshForUserAllWalletsRequest request)
         {
             await mediator.Send(request);
             return Ok();

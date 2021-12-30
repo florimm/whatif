@@ -23,7 +23,7 @@ export async function getData(url = '') {
 }
 
 export async function login(username, password) {
-    const response = await fetch('http://localhost:3602/v1.0/invoke/whatifapi/method/user/login', {
+    const response = await fetch('http://localhost:3602/v1.0/invoke/whatifapi/method/users/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

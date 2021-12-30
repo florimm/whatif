@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -24,6 +26,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 });
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<IPrincipal>(s => (ClaimsPrincipal)s.GetService<IHttpContextAccessor>().HttpContext.User);
 
 var allowDaprForSwagger = "allowDaprForSwagger";
 

@@ -1,5 +1,5 @@
 
-POST http://localhost:3602/v1.0/invoke/whatifapi/method/user HTTP/1.1
+POST http://localhost:3602/v1.0/invoke/whatifapi/method/users HTTP/1.1
 content-type: application/json
 
 {
@@ -12,7 +12,7 @@ content-type: application/json
 ###
 
 # @name login
-POST http://localhost:3602/v1.0/invoke/whatifapi/method/user/login HTTP/1.1
+POST http://localhost:3602/v1.0/invoke/whatifapi/method/users/login HTTP/1.1
 content-type: application/json
 
 {
@@ -23,11 +23,22 @@ content-type: application/json
 
 @authToken = {{login.response.body.token}}
 
-GET http://localhost:3602/v1.0/invoke/whatifapi/method/user HTTP/1.1
+GET http://localhost:3602/v1.0/invoke/whatifapi/method/users HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 
-GET http://localhost:3602/v1.0/invoke/whatifapi/method/user/35a8b18b-2b59-4002-958d-65879331b713/wallets
+GET http://localhost:3602/v1.0/invoke/whatifapi/method/users/35a8b18b-2b59-4002-958d-65879331b713/wallets
 Authorization: Bearer {{authToken}}
+###
+
+POST http://localhost:3602/v1.0/invoke/whatifapi/method/users/35a8b18b-2b59-4002-958d-65879331b713/wallets
+Authorization: Bearer {{authToken}}
+content-type: application/json
+
+{
+    "name": "123",
+    "userId": "35a8b18b-2b59-4002-958d-65879331b713"
+}
+
 ###
 

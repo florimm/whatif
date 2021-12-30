@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Icon } from '@iconify/react';
-import { getData } from "../../utilities/requests";
+import { getData } from "../../../utilities/requests";
 import { queryKeys } from '../../../constants';
 
 export default function InvestmentRow({ pair }) {

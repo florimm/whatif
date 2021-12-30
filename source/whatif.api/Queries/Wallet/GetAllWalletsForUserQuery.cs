@@ -21,6 +21,10 @@ namespace WhatIf.Api.Queries.Wallet
         public async Task<GetAllWalletsForUserQueryResult> Handle(GetAllWalletsForUserQuery request, CancellationToken cancellationToken)
         {
             var userWallets = await daprClient.GetStateAsync<UserWallets>("statestore", $"{request.UserId}-wallets");
+            if (userWallets == null)
+            {
+                return new GetAllWalletsForUserQueryResult(new List<Wallet>());
+            }
             return new GetAllWalletsForUserQueryResult(userWallets.Wallets.Select(t => new Wallet(t.Id, t.Name)).ToList());
         }
     }

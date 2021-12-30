@@ -30,7 +30,7 @@ export default function List() {
     });
 
     const saveWallet = wallet => {
-        mutation.mutate({ ...wallet });
+        mutation.mutate({ ...wallet, userId });
         handleClose();
     }
 
@@ -55,7 +55,7 @@ export default function List() {
                     </div>
                 </div>
             {
-                data?.map(wallet => (
+                data?.wallets.map(wallet => (
                 <Link key={wallet.id} to={`/wallets/${wallet.id}`} className="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
                     <Icon icon="ant-design:wallet-filled" />
                     <div className="d-flex gap-2 w-100 justify-content-between">
