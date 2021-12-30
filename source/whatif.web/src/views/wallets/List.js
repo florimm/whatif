@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useQuery, useQueryClient, useMutation } from "react-query";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Icon } from '@iconify/react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import PullToRefresh from "react-simple-pull-to-refresh";
 import WalletForm from "./components/WalletForm";
 import { getData, postData } from "../../utilities/requests";
 import { useUserId } from '../../components/useUserId';
+import { queryKeys } from '../../constants';
 
 export default function List() {
     const userId = useUserId();
@@ -15,14 +16,15 @@ export default function List() {
     const handleShow = () => setShow(true);
     const queryClient = useQueryClient();
 
-    const { isLoading, data } = useQuery(['walletList', userId], () => {
-        return getData(`users/${userId}/wallets`);
-    });
+    const { isLoading, data } = useQuery(
+        [queryKeys.wallet.list, userId],
+        () => getData(`users/${userId}/wallets`)
+    );
 
     const mutation = useMutation(
         wallet => postData(`users/${userId}/wallets`, wallet), {
         onSuccess: () => {
-            queryClient.invalidateQueries('walletList');
+            queryClient.invalidateQueries(queryKeys.wallet.list);
             handleClose();
         },
     });
@@ -33,7 +35,7 @@ export default function List() {
     }
 
     const handleRefresh = () => {
-        return queryClient.invalidateQueries('walletList');
+        queryClient.invalidateQueries(queryKeys.wallet.list);
     };
 
     if (isLoading) {
@@ -69,7 +71,7 @@ export default function List() {
         </PullToRefresh>
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-            <Modal.Title>Create new wallet</Modal.Title>
+                <Modal.Title>Create new wallet</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <WalletForm onSave={saveWallet} onCancel={handleClose} />

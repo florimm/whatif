@@ -6,27 +6,29 @@ import { Modal } from 'react-bootstrap';
 import { getData, postData } from "../../utilities/requests";
 import { useUserId } from '../../components/useUserId';
 import InvestmentRow from './components/InvestmentRow';
+import { queryKeys } from '../../constants';
 
 export default function Details() {
     const userId = useUserId();
     const [show, setShow] = useState(false);
+    const { walletId } = useParams();
+    const queryClient = useQueryClient();
 
     const handleClose = () => setShow(false);
     const onEditWallet = () => {
         setShow(true);
     };
-    const { walletId } = useParams();
-    const queryClient = useQueryClient();
 
-    const { isLoading, data } = useQuery(['walletDetail', walletId], () => {
-        return getData(`users/${userId}/wallets/${walletId}`);
-    });
+    const { isLoading, data } = useQuery(
+        [queryKeys.wallet.detail, walletId],
+        () => getData(`users/${userId}/wallets/${walletId}`)
+    );
 
     const mutation = useMutation(
         wallet => postData(`users/${userId}/wallets/${walletId}`, wallet), {
         onSuccess: () => {
-            queryClient.invalidateQueries('walletList');
-            queryClient.invalidateQueries(['walletDetail', walletId]);
+            queryClient.invalidateQueries(queryKeys.wallet.list);
+            queryClient.invalidateQueries([queryKeys.wallet.detail, walletId]);
             handleClose();
         },
     });
@@ -36,7 +38,7 @@ export default function Details() {
     }
 
     const handleRefresh = () => {
-        return queryClient.invalidateQueries(['walletDetail', walletId]);
+        queryClient.invalidateQueries([queryKeys.wallet.detail, walletId]);
     };
 
     if (isLoading) {
@@ -57,7 +59,7 @@ export default function Details() {
                     </div>
                 </div>
                 {
-                    data.pairs.map(pair => <InvestmentRow key={pair.pair} pair={pair} />)
+                    data?.pairs?.map(pair => <InvestmentRow key={pair.pair} pair={pair} />)
                 }
                 <Link to="..">Back</Link>
             </PullToRefresh>
