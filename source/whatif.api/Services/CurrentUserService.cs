@@ -1,21 +1,22 @@
 using System.Security.Claims;
+using System.Security.Principal;
 
 namespace WhatIf.Api.Services
 {
     public interface ICurrentUserService {
         string GetUserId();
     }
-    public class CurrentUserService
+    public class CurrentUserService : ICurrentUserService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public CurrentUserService(IHttpContextAccessor httpContextAccessor)
+        private readonly ClaimsPrincipal principal;
+        public CurrentUserService(IPrincipal principal)
         {
-            _httpContextAccessor = httpContextAccessor;
+            this.principal = (ClaimsPrincipal)principal;
         }
 
         public string GetUserId()
         {
-            return _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return principal.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }
 }

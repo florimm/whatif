@@ -7,7 +7,21 @@ using WhatIf.Api.Models;
 namespace WhatIf.Api.Actors
 {
     public record PairPriceChanged(string Pair, double Price);
-    public record MonitorPairRequest(string Symbol, int RefreshIntervalInSeconds = 60);
+    public class MonitorPairRequest
+    {
+        public MonitorPairRequest(string symbol, int refreshInterval = 60)
+        {
+            this.Symbol = symbol;
+            this.RefreshIntervalInSeconds = refreshInterval;
+        }
+        public MonitorPairRequest()
+        {
+            
+        }
+
+        public string Symbol {get;set;}
+        public int RefreshIntervalInSeconds {get;set;} = 60;
+    }
     
     public record PairState(string Symbol, int RefreshIntervalInSeconds);
     
@@ -27,12 +41,14 @@ namespace WhatIf.Api.Actors
 
         public async Task Monitor(MonitorPairRequest request)
         {
-            if (!timerRegistered)
-            {
-                timerRegistered = true;
-                var pairSymbol = Encoding.UTF8.GetBytes(request.Symbol.ToUpper());
+            var pairSymbol = Encoding.UTF8.GetBytes(request.Symbol.ToUpper());
                 await RegisterTimerAsync("Request-Price", nameof(TimerCallbackAsync), pairSymbol, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(request.RefreshIntervalInSeconds));
-            }
+                
+            // if (!timerRegistered)
+            // {
+            //     timerRegistered = true;
+                
+            // }
         }
 
         public async Task TimerCallbackAsync(byte[] state)

@@ -3,24 +3,28 @@ using Dapr.Actors.Client;
 using Dapr.Client;
 using MediatR;
 using WhatIf.Api.Actors;
+using WhatIf.Api.Services;
 using WhatIf.Api.States;
 
 namespace WhatIf.Api.Commands.Wallet
 {
-    public record RefreshForUserAllWalletsRequest(string UserId) : IRequest;
+    public record RefreshForUserAllWalletsRequest() : IRequest;
 
     public class RefreshForUserAllWalletsHandler : IRequestHandler<RefreshForUserAllWalletsRequest>
     {
         private readonly IActorProxyFactory actorProxyFactory;
         private readonly DaprClient daprClient;
-        public RefreshForUserAllWalletsHandler(DaprClient daprClient, IActorProxyFactory actorProxyFactory)
+        private readonly ICurrentUserService userService;
+        public RefreshForUserAllWalletsHandler(DaprClient daprClient, IActorProxyFactory actorProxyFactory, ICurrentUserService currentUserService)
         {
             this.daprClient = daprClient;
             this.actorProxyFactory = actorProxyFactory;
+            this.userService = currentUserService;
         }
         public async Task<Unit> Handle(RefreshForUserAllWalletsRequest request, CancellationToken cancellationToken)
         {
-            var userWallets = await daprClient.GetStateAsync<UserWallets>("statestore", $"{request.UserId}-wallets");
+            var userId = userService.GetUserId();
+            var userWallets = await daprClient.GetStateAsync<UserWallets>("statestore", $"{userId}-wallets");
             if (userWallets != null)
             {
                 var investmentsPairs = new List<string>();

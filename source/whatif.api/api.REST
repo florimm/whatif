@@ -42,3 +42,21 @@ content-type: application/json
 
 ###
 
+POST http://localhost:3602/v1.0/invoke/whatifapi/method/users/35a8b18b-2b59-4002-958d-65879331b713/wallets/4b0cc568-1260-4042-b656-4b966ec14d97
+Authorization: Bearer {{authToken}}
+content-type: application/json
+
+{
+    "id": "4b0cc568-1260-4042-b656-4b966ec14d97",
+    "name": "NewWallet2"
+}
+
+###
+POST http://localhost:3602/v1.0/invoke/whatifapi/method/users/35a8b18b-2b59-4002-958d-65879331b713/wallets/refresh
+Authorization: Bearer {{authToken}}
+content-type: application/json
+
+{
+    "name": ""
+}
+

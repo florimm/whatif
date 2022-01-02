@@ -7,20 +7,20 @@ using WhatIf.Api.States;
 
 namespace WhatIf.Api.Commands.Wallet
 {
-    public record AddInvestmentRequest(Guid WalletId, string Symbol, string From, string To, double Value, double Amount) : IRequest<Investment>;
+    public record CreateInvestmentRequest(Guid WalletId, string Symbol, string From, string To, double Value, double Amount) : IRequest<Investment>;
 
-    public class AddInvestmentHandler : IRequestHandler<AddInvestmentRequest, Investment>
+    public class CreateInvestmentHandler : IRequestHandler<CreateInvestmentRequest, Investment>
     {
         private readonly DaprClient daprClient;
         private readonly IActorProxyFactory actorProxyFactory;
 
-        public AddInvestmentHandler(DaprClient daprClient, IActorProxyFactory actorProxyFactory)
+        public CreateInvestmentHandler(DaprClient daprClient, IActorProxyFactory actorProxyFactory)
         {
             this.daprClient = daprClient;
             this.actorProxyFactory = actorProxyFactory;
         }
 
-        public async Task<Investment> Handle(AddInvestmentRequest request, CancellationToken cancellationToken)
+        public async Task<Investment> Handle(CreateInvestmentRequest request, CancellationToken cancellationToken)
         {
             var wallet = await daprClient.GetStateAsync<WalletInvestments>("statestore", request.WalletId.ToString());
             //patern matching

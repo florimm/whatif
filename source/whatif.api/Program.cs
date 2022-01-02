@@ -27,7 +27,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddTransient<IPrincipal>(s => (ClaimsPrincipal)s.GetService<IHttpContextAccessor>().HttpContext.User);
+builder.Services.AddScoped<ICurrentUserService>(
+    s => new CurrentUserService(principal: s.GetService<IHttpContextAccessor>().HttpContext.User as ClaimsPrincipal));
 
 var allowDaprForSwagger = "allowDaprForSwagger";
 

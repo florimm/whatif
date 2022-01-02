@@ -11,7 +11,7 @@ namespace WhatIf.Api.Services
     }
     public class TokenService : ITokenService
     {
-        private TimeSpan ExpiryDuration = new TimeSpan(0, 30, 0);
+        private TimeSpan ExpiryDuration = new TimeSpan(12, 30, 0);
         private string issuer;
         private string key;
         public TokenService(string key, string issuer)

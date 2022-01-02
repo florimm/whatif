@@ -8,7 +8,13 @@ export async function postData(url = '', data = {}) {
         },
         body: JSON.stringify(data)
     });
-    return response.json();
+    if (response.ok) {
+        if (response.text.length > 0) {
+            return response.json();
+        }
+        return {};
+    }
+    throw new Error(response.statusText);
 }
 
 export async function getData(url = '') {

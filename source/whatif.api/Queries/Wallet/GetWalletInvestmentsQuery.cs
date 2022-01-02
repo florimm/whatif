@@ -4,6 +4,7 @@ using System.Text.Json;
 using Dapr.Client;
 using MediatR;
 using WhatIf.Api.Actors;
+using WhatIf.Api.Services;
 using WhatIf.Api.States;
 
 namespace WhatIf.Api.Queries.Wallet
@@ -16,17 +17,17 @@ namespace WhatIf.Api.Queries.Wallet
     public class GetWalletInvestmentsQueryHandler : IRequestHandler<GetWalletInvestmentsQuery, GetWalletInvestmentsQueryResult>
     {
         private readonly DaprClient daprClient;
-        private readonly ClaimsPrincipal principal;
+        private readonly ICurrentUserService currentUser;
 
-        public GetWalletInvestmentsQueryHandler(DaprClient daprClient, IPrincipal principal)
+        public GetWalletInvestmentsQueryHandler(DaprClient daprClient, ICurrentUserService currentUser)
         {
             this.daprClient = daprClient;
-            this.principal = (ClaimsPrincipal)principal;
+            this.currentUser = currentUser;
         }
 
         public async Task<GetWalletInvestmentsQueryResult> Handle(GetWalletInvestmentsQuery request, CancellationToken cancellationToken)
         {
-            string userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+            string userId = currentUser.GetUserId();
 
             var walletInvestments = await daprClient.GetStateAsync<WalletInvestments>("statestore", request.WalletId.ToString());
             var userWallets = await daprClient.GetStateAsync<UserWallets>("statestore", $"{userId}-wallets");

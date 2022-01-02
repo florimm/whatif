@@ -37,6 +37,17 @@
                 "/consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "appId": "whatifapi",
+            "appPort": 5178,
+            "label": "daprd-debug",
+            "type": "daprd"
+        },
+        {
+            "appId": "whatifapi",
+            "label": "daprd-down",
+            "type": "daprd-down"
         }
     ]
 }
