@@ -1,4 +1,4 @@
-const baseUrl = `http://localhost:3602/v1.0/invoke/whatifapi/method`;
+const baseUrl = `http://localhost:3500/v1.0/invoke/whatifapi/method`;
 export async function postData(url = '', data = {}) {
     const response = await fetch(`${baseUrl}/${url}`, {
         method: 'POST',
@@ -29,7 +29,7 @@ export async function getData(url = '') {
 }
 
 export async function login(username, password) {
-    const response = await fetch('http://localhost:3602/v1.0/invoke/whatifapi/method/users/login', {
+    const response = await fetch('http://localhost:3500/v1.0/invoke/whatifapi/method/users/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -5,7 +5,7 @@ import { getData } from "../../../utilities/requests";
 import { queryKeys } from '../../../constants';
 
 export default function InvestmentRow({ pair }) {
-    const parRequest = `${pair.to.toUpperCase()}${pair.from.toUpperCase()}`;
+    const parRequest = `${pair.from.toUpperCase()}${pair.to.toUpperCase()}`;
     const { data: currentValue } = useQuery(
         [queryKeys.price, parRequest],
         (data) => getData(`pair-price/${data.queryKey[1]}`),

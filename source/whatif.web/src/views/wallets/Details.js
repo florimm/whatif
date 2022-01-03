@@ -24,9 +24,8 @@ export default function Details() {
     const onAddInvestment = () => {
         addInvestmentMutation.mutate({
             walletId: walletId, 
-            symbol: 'USDTETH', 
-            From: 'USDT', 
-            To: 'ETH', 
+            From: 'eth', 
+            To: 'usdt', 
             Value: 300,
             Amount: 1
         });
@@ -34,11 +33,11 @@ export default function Details() {
 
     const { isLoading, data } = useQuery(
         [queryKeys.wallet.detail, walletId],
-        () => getData(`users/${userId}/wallets/${walletId}/investments`)
+        () => getData(`wallets/${walletId}/investments`)
     );
 
     const mutation = useMutation(
-        wallet => postData(`users/${userId}/wallets/${walletId}`, wallet), {
+        wallet => postData(`wallets/${walletId}`, wallet), {
         onSuccess: () => {
             queryClient.invalidateQueries(queryKeys.wallet.list);
             queryClient.invalidateQueries([queryKeys.wallet.detail, walletId]);
@@ -47,7 +46,7 @@ export default function Details() {
     });
 
     const addInvestmentMutation = useMutation(
-        investment => postData(`users/${userId}/wallets/${walletId}/investments`, investment), {
+        investment => postData(`wallets/${walletId}/investments`, investment), {
         onSuccess: () => {
             queryClient.invalidateQueries(queryKeys.wallet.list);
             queryClient.invalidateQueries([queryKeys.wallet.detail, walletId]);
@@ -60,7 +59,7 @@ export default function Details() {
     }
 
     const handleRefresh = () => {
-        postData(`users/${userId}/wallets/refresh`).then(() => {
+        postData(`wallets/refresh`).then(() => {
             queryClient.invalidateQueries([queryKeys.wallet.detail, walletId]);
         });
     };

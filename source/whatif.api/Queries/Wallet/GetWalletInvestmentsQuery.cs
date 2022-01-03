@@ -28,16 +28,18 @@ namespace WhatIf.Api.Queries.Wallet
         public async Task<GetWalletInvestmentsQueryResult> Handle(GetWalletInvestmentsQuery request, CancellationToken cancellationToken)
         {
             string userId = currentUser.GetUserId();
-
-            var walletInvestments = await daprClient.GetStateAsync<WalletInvestments>("statestore", request.WalletId.ToString());
             var userWallets = await daprClient.GetStateAsync<UserWallets>("statestore", $"{userId}-wallets");
             var currentWallet = userWallets.Wallets.Single(t => t.Id == request.WalletId);
-            if (walletInvestments == null)
+            System.Console.WriteLine($"request.WalletId.ToString() {request.WalletId}");
+
+            var walletInvestments = await daprClient.GetStateEntryAsync<WalletInvestments>("statestore", request.WalletId.ToString());
+            
+            if (walletInvestments.Value is null)
             {
                 return new GetWalletInvestmentsQueryResult(currentWallet.Name, new List<WalletInvestment>());
             }
             return new GetWalletInvestmentsQueryResult(currentWallet.Name, 
-                walletInvestments.Investments.Select(t => new WalletInvestment(t.From, t.To, t.Amount)).ToList());
+                walletInvestments.Value.Investments.Select(t => new WalletInvestment(t.From, t.To, t.Amount)).ToList());
         }
     }
 

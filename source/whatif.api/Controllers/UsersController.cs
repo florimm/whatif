@@ -19,7 +19,6 @@ namespace WhatIf.Api.Controllers
 
         public UsersController(IMediator mediator, ILogger<UsersController> logger)
         {
-            this.daprClient = daprClient;
             this.mediator = mediator;
             _logger = logger;
         }

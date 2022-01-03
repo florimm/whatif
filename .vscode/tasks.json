@@ -32,7 +32,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/source/WhatIf.Api/WhatIf.Api.csproj",
+                "${workspaceFolder}/source/whatif.api/WhatIf.Api.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -42,7 +42,9 @@
             "appId": "whatifapi",
             "appPort": 5178,
             "label": "daprd-debug",
-            "type": "daprd"
+            "componentsPath": "C:/projects/what-if/source/whatif.api/dapr/components",
+            "type": "daprd",
+            "dependsOn": "build"
         },
         {
             "appId": "whatifapi",

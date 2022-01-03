@@ -1,5 +1,6 @@
 using Dapr.Client;
 using MediatR;
+using WhatIf.Api.Services;
 using WhatIf.Api.States;
 
 namespace WhatIf.Api.Queries.Wallet
@@ -22,7 +23,7 @@ namespace WhatIf.Api.Queries.Wallet
 
         public async Task<GetAllWalletsForUserQueryResult> Handle(GetAllWalletsForUserQuery request, CancellationToken cancellationToken)
         {
-            var userId = await currentUserService.GetUserId();
+            var userId = currentUserService.GetUserId();
             var userWallets = await daprClient.GetStateAsync<UserWallets>("statestore", $"{userId}-wallets");
             if (userWallets == null)
             {

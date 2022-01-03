@@ -34,6 +34,27 @@
             "processId": "${command:pickProcess}",
             "preLaunchTask": "daprd-debug",
             "postDebugTask": "daprd-down"
+        },
+        {
+            "name": ".NET Core Launch (web) with Dapr",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "daprd-debug",
+            "program": "${workspaceFolder}/source/WhatIf.Api/bin/Debug/net6.0/WhatIf.Api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/source/WhatIf.Api",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            },
+            "postDebugTask": "daprd-down"
         }
     ]
 }

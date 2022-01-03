@@ -32,35 +32,34 @@ Authorization: Bearer {{authToken}}
 content-type: application/json
 
 {
-    "name": "123",
-    "userId": "35a8b18b-2b59-4002-958d-65879331b713"
+    "name": "Wallet 1"
 }
 
 ###
 
-POST http://localhost:3602/v1.0/invoke/whatifapi/method/wallets/4b0cc568-1260-4042-b656-4b966ec14d97
+POST http://localhost:3602/v1.0/invoke/whatifapi/method/wallets/c8748c8e-a47b-467f-9f8c-52da5ad848df
 Authorization: Bearer {{authToken}}
 content-type: application/json
 
 {
-    "id": "4b0cc568-1260-4042-b656-4b966ec14d97",
+    "id": "c8748c8e-a47b-467f-9f8c-52da5ad848df",
     "name": "NewWallet2"
 }
 
 ###
 
-GET http://localhost:3602/v1.0/invoke/whatifapi/method/wallets/4b0cc568-1260-4042-b656-4b966ec14d97/investments
+GET http://localhost:3602/v1.0/invoke/whatifapi/method/wallets/c8748c8e-a47b-467f-9f8c-52da5ad848df/investments
 Authorization: Bearer {{authToken}}
 ###
 
 
-POST http://localhost:3602/v1.0/invoke/whatifapi/method/wallets/4b0cc568-1260-4042-b656-4b966ec14d97/investments
+POST http://localhost:3602/v1.0/invoke/whatifapi/method/wallets/c8748c8e-a47b-467f-9f8c-52da5ad848df/investments
 Authorization: Bearer {{authToken}}
 
 {
-    "walletId": "4b0cc568-1260-4042-b656-4b966ec14d97",
-    "from": "usdt",
-    "to": "eth",
+    "walletId": "c8748c8e-a47b-467f-9f8c-52da5ad848df",
+    "from": "eth",
+    "to": "usdt",
     "Value": 4000,
     "Amount": 1
 }

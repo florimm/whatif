@@ -11,12 +11,22 @@ namespace WhatIf.Api.Actors
         public string Pair => $"{From.ToUpper()}{To.ToUpper()}";
     };
 
-    public record MonitorPairRequest(string From, string To, int RefreshIntervalInSeconds = 60)
+    public class MonitorPairRequest
     {
-        public string? From { get; init; }
-        public string? To { get; init; }
-        public int RefreshIntervalInSeconds {get;init;} = 60;
+        public MonitorPairRequest(string from, string to)
+        {
+            From = from;
+            To = to;
+        }
 
+        public MonitorPairRequest()
+        {
+            
+        }
+
+        public string From { get;set;}
+        public string To { get;set;}
+        public int RefreshIntervalInSeconds {get;set;} = 60;
         public string ToPair() => $"{From?.ToUpper()}-{To?.ToUpper()}";
 
         public string ToPairRequest() => $"{From?.ToUpper()}{To?.ToUpper()}";
@@ -50,11 +60,13 @@ namespace WhatIf.Api.Actors
         {
             try
             {
+                System.Console.WriteLine("refresh for " + $"{from}{to}");
                 var result = await MakeRequest<PriceResponse>($"{from}{to}");
                 return result;
             }
             catch (Exception ex)
             {
+                System.Console.WriteLine("Error: " + ex.Message);
                 throw new PairNotExistException();
             }
         }
@@ -63,6 +75,7 @@ namespace WhatIf.Api.Actors
         {                
             if (!timerRegistered)
             {
+                System.Console.WriteLine("Monitoring");
                 timerRegistered = true;
                 var pairSymbol = Encoding.UTF8.GetBytes(request.ToPair());
                 await RegisterTimerAsync(

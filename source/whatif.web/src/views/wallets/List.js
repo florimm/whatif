@@ -18,11 +18,11 @@ export default function List() {
 
     const { isLoading, data } = useQuery(
         [queryKeys.wallet.list, userId],
-        () => getData(`users/${userId}/wallets`)
+        () => getData(`wallets`)
     );
 
     const mutation = useMutation(
-        wallet => postData(`users/${userId}/wallets`, wallet), {
+        wallet => postData(`wallets`, wallet), {
         onSuccess: () => {
             queryClient.invalidateQueries(queryKeys.wallet.list);
             handleClose();
