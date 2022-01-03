@@ -5,9 +5,10 @@ import { getData } from "../../../utilities/requests";
 import { queryKeys } from '../../../constants';
 
 export default function InvestmentRow({ pair }) {
-    const { data: price } = useQuery(
-        [queryKeys.price, pair.pair],
-        (data) => getData(`pricechange/pair-price/${data.queryKey[1]}`),
+    const parRequest = `${pair.to.toUpperCase()}${pair.from.toUpperCase()}`;
+    const { data: currentValue } = useQuery(
+        [queryKeys.price, parRequest],
+        (data) => getData(`pair-price/${data.queryKey[1]}`),
         { refetchInterval: (1000 * 60) }
     );
 
@@ -25,10 +26,10 @@ export default function InvestmentRow({ pair }) {
                 <div>
                     <small className="opacity-50 text-nowrap">{pair.value}$</small>
                     <br />
-                    <small className="opacity-50 text-nowrap">{price} $</small>
+                    <small className="opacity-50 text-nowrap">{currentValue?.price} $</small>
                 </div>
                 <div>
-                    <small className="opacity-50 text-nowrap">{(pair.amount * price).toFixed(2)} $</small>
+                    <small className="opacity-50 text-nowrap">{(pair.amount * currentValue?.price).toFixed(2)} $</small>
                     <br />
                     <small className="opacity-50 text-nowrap">{pair.amount}</small>
                 </div>

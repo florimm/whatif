@@ -27,8 +27,9 @@ namespace WhatIf.Api.Controllers
         [Topic("pubsub", "price-change")]
         public async Task<ActionResult> Subscribe(PairPriceChanged data)
         {
+            System.Console.WriteLine($"Price Change: {data.Pair} {data.Price}");
             await _daprClient.SaveStateAsync<PairPriceChanged>("statestore", data.Pair.ToUpper(), data);
-            _logger.LogInformation("PriceChangeController.Subscribe", data);
+            // _logger.LogInformation("PriceChangeController.Subscribe", data.Pair.ToUpper());
             return Ok();
         }
 

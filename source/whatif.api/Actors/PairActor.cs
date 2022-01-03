@@ -54,8 +54,10 @@ namespace WhatIf.Api.Actors
         public async Task TimerCallbackAsync(byte[] state)
         {
             var pairSymbol = Encoding.UTF8.GetString(state);
-            var metadata = new Dictionary<string, string>() { ["path"] = $"price?symbol={pairSymbol}" };
-            var response = await daprClient.InvokeBindingAsync<object?, BinancePriceResponse>("binance-pair", "get", null, metadata);
+            System.Console.WriteLine($"==================================={pairSymbol}");
+            var metadata = new Dictionary<string, string>() { ["path"] = $"ticker/price?symbol={pairSymbol}" };
+            var response = await daprClient.InvokeBindingAsync<object?, BinancePriceResponse>("binance-price", "get", null, metadata);
+            System.Console.WriteLine($"==================================={response.Symbol} => {response.Price}");
             await daprClient.PublishEventAsync("pubsub", "price-change", new PairPriceChanged(response.Symbol, response.Price));
         }
     }

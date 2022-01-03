@@ -60,3 +60,7 @@ content-type: application/json
     "name": ""
 }
 
+###
+GET http://localhost:3602/v1.0/invoke/whatifapi/method/pair-price/ETHUSDT
+Authorization: Bearer {{authToken}}
+

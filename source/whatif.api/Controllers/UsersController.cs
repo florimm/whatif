@@ -1,8 +1,10 @@
+using Dapr.Client;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WhatIf.Api.Commands.User;
 using WhatIf.Api.Commands.Wallet;
+using WhatIf.Api.Models;
 using WhatIf.Api.Queries.Wallet;
 
 namespace WhatIf.Api.Controllers
@@ -14,9 +16,11 @@ namespace WhatIf.Api.Controllers
     {
         private readonly IMediator mediator;
         private readonly ILogger<UsersController> _logger;
+        private readonly DaprClient daprClient;
 
-        public UsersController(IMediator mediator, ILogger<UsersController> logger)
+        public UsersController(DaprClient daprClient, IMediator mediator, ILogger<UsersController> logger)
         {
+            this.daprClient = daprClient;
             this.mediator = mediator;
             _logger = logger;
         }
@@ -73,7 +77,7 @@ namespace WhatIf.Api.Controllers
             return Ok();
         }
 
-        [HttpGet("{userId}/wallets/refresh")]
+        [HttpPost("{userId}/wallets/refresh")]
         public async Task<ActionResult> Refresh([FromRoute] RefreshForUserAllWalletsRequest request)
         {
             await mediator.Send(request);
