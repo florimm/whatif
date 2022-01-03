@@ -7,20 +7,23 @@ namespace WhatIf.Api.Queries.Wallet
     public record Wallet(Guid Id, string Name);
     public record GetAllWalletsForUserQueryResult(List<Wallet> Wallets);
 
-    public record GetAllWalletsForUserQuery(string UserId) : IRequest<GetAllWalletsForUserQueryResult>;
+    public record GetAllWalletsForUserQuery() : IRequest<GetAllWalletsForUserQueryResult>;
 
     public class GetAllWalletsForUserQueryHandler : IRequestHandler<GetAllWalletsForUserQuery, GetAllWalletsForUserQueryResult>
     {
         private readonly DaprClient daprClient;
+        private readonly ICurrentUserService currentUserService;
 
-        public GetAllWalletsForUserQueryHandler(DaprClient daprClient)
+        public GetAllWalletsForUserQueryHandler(DaprClient daprClient, ICurrentUserService currentUserService)
         {
             this.daprClient = daprClient;
+            this.currentUserService = currentUserService;
         }
 
         public async Task<GetAllWalletsForUserQueryResult> Handle(GetAllWalletsForUserQuery request, CancellationToken cancellationToken)
         {
-            var userWallets = await daprClient.GetStateAsync<UserWallets>("statestore", $"{request.UserId}-wallets");
+            var userId = await currentUserService.GetUserId();
+            var userWallets = await daprClient.GetStateAsync<UserWallets>("statestore", $"{userId}-wallets");
             if (userWallets == null)
             {
                 return new GetAllWalletsForUserQueryResult(new List<Wallet>());

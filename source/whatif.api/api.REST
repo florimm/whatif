@@ -23,15 +23,11 @@ content-type: application/json
 
 @authToken = {{login.response.body.token}}
 
-GET http://localhost:3602/v1.0/invoke/whatifapi/method/users HTTP/1.1
+GET http://localhost:3602/v1.0/invoke/whatifapi/method/wallets
 Authorization: Bearer {{authToken}}
 ###
 
-GET http://localhost:3602/v1.0/invoke/whatifapi/method/users/35a8b18b-2b59-4002-958d-65879331b713/wallets
-Authorization: Bearer {{authToken}}
-###
-
-POST http://localhost:3602/v1.0/invoke/whatifapi/method/users/35a8b18b-2b59-4002-958d-65879331b713/wallets
+POST http://localhost:3602/v1.0/invoke/whatifapi/method/wallets
 Authorization: Bearer {{authToken}}
 content-type: application/json
 
@@ -42,7 +38,7 @@ content-type: application/json
 
 ###
 
-POST http://localhost:3602/v1.0/invoke/whatifapi/method/users/35a8b18b-2b59-4002-958d-65879331b713/wallets/4b0cc568-1260-4042-b656-4b966ec14d97
+POST http://localhost:3602/v1.0/invoke/whatifapi/method/wallets/4b0cc568-1260-4042-b656-4b966ec14d97
 Authorization: Bearer {{authToken}}
 content-type: application/json
 
@@ -52,15 +48,37 @@ content-type: application/json
 }
 
 ###
-POST http://localhost:3602/v1.0/invoke/whatifapi/method/users/35a8b18b-2b59-4002-958d-65879331b713/wallets/refresh
+
+GET http://localhost:3602/v1.0/invoke/whatifapi/method/wallets/4b0cc568-1260-4042-b656-4b966ec14d97/investments
+Authorization: Bearer {{authToken}}
+###
+
+
+POST http://localhost:3602/v1.0/invoke/whatifapi/method/wallets/4b0cc568-1260-4042-b656-4b966ec14d97/investments
+Authorization: Bearer {{authToken}}
+
+{
+    "walletId": "4b0cc568-1260-4042-b656-4b966ec14d97",
+    "from": "usdt",
+    "to": "eth",
+    "Value": 4000,
+    "Amount": 1
+}
+###
+
+###
+POST http://localhost:3602/v1.0/invoke/whatifapi/method/wallets/refresh
 Authorization: Bearer {{authToken}}
 content-type: application/json
 
 {
-    "name": ""
 }
 
 ###
 GET http://localhost:3602/v1.0/invoke/whatifapi/method/pair-price/ETHUSDT
+Authorization: Bearer {{authToken}}
+
+###
+GET http://localhost:3602/v1.0/invoke/whatifapi/method/pair/eth-usdt
 Authorization: Bearer {{authToken}}
 

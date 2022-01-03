@@ -1,43 +1,59 @@
 using Dapr;
+using Dapr.Actors;
 using Dapr.Actors.Client;
 using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
 using WhatIf.Api.Actors;
+using WhatIf.Api.Exceptions;
 
 namespace WhatIf.Api.Controllers
 {
     [ApiController]
     public class PriceChangeController : ControllerBase
     {
-        private readonly DaprClient _daprClient;
-        private readonly ILogger<PriceChangeController> _logger;
-        private readonly IActorProxyFactory _actorProxyFactory;
+        private readonly DaprClient daprClient;
+        private readonly ILogger<PriceChangeController> logger;
+        private readonly IActorProxyFactory actorProxyFactory;
 
         public PriceChangeController(
             DaprClient daprClient,
             ILogger<PriceChangeController> logger,
             IActorProxyFactory actorProxyFactory)
         {
-            _daprClient = daprClient;
-            _logger = logger;
-            _actorProxyFactory = actorProxyFactory;
+            this.daprClient = daprClient;
+            this.logger = logger;
+            this.actorProxyFactory = actorProxyFactory;
         }
 
         [HttpPost("price-change")]
         [Topic("pubsub", "price-change")]
         public async Task<ActionResult> Subscribe(PairPriceChanged data)
         {
-            System.Console.WriteLine($"Price Change: {data.Pair} {data.Price}");
-            await _daprClient.SaveStateAsync<PairPriceChanged>("statestore", data.Pair.ToUpper(), data);
-            // _logger.LogInformation("PriceChangeController.Subscribe", data.Pair.ToUpper());
+            System.Console.WriteLine($"Price Change: {data.From} {data.To} {data.Price}");
+            await daprClient.SaveStateAsync<PairPriceChanged>("statestore", data.Pair, data);
             return Ok();
         }
 
         [HttpGet("pair-price/{pair}")]
         public async Task<ActionResult> GetPairPrice(string pair)
         {
-            var result = await _daprClient.GetStateAsync<PairPriceChanged>("statestore", pair.ToUpper());
+            var result = await daprClient.GetStateAsync<PairPriceChanged>("statestore", pair.ToUpper());
             return Ok(result);
+        }
+
+        [HttpGet("pair/{from}-{to}")]
+        public async Task<ActionResult> GetPriceForPair([FromRoute]string from, [FromRoute]string to)
+        {
+            try
+            {
+                var proxy = actorProxyFactory.CreateActorProxy<IPairActor>(new ActorId($"{from}{to}"), nameof(PairActor));
+                var result = await proxy.CurrentPrice(from, to);
+                return Ok(result);
+            }
+            catch(PairNotExistException ex)
+            {
+                return NotFound();
+            }
         }
     }
 

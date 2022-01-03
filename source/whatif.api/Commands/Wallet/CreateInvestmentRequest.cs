@@ -7,7 +7,7 @@ using WhatIf.Api.States;
 
 namespace WhatIf.Api.Commands.Wallet
 {
-    public record CreateInvestmentRequest(Guid WalletId, string Symbol, string From, string To, double Value, double Amount) : IRequest<Investment>;
+    public record CreateInvestmentRequest(Guid WalletId, string From, string To, double Value, double Amount) : IRequest<Investment>;
 
     public class CreateInvestmentHandler : IRequestHandler<CreateInvestmentRequest, Investment>
     {
@@ -24,7 +24,7 @@ namespace WhatIf.Api.Commands.Wallet
         {
             var wallet = await daprClient.GetStateAsync<WalletInvestments>("statestore", request.WalletId.ToString());
             //patern matching
-            var investment = new Investment(request.Symbol, request.From, request.To, request.Value, request.Amount);
+            var investment = new Investment(request.From, request.To, request.Value, request.Amount);
             switch (wallet)
             {
                 case null:
@@ -35,8 +35,8 @@ namespace WhatIf.Api.Commands.Wallet
                     break;
             }
             await daprClient.SaveStateAsync<WalletInvestments>("statestore", request.WalletId.ToString(), wallet);
-            var proxy = actorProxyFactory.CreateActorProxy<IPairActor>(new ActorId($"{request.Symbol.ToUpper()}"), nameof(PairActor));
-            await proxy.Monitor(new MonitorPairRequest(request.Symbol));
+            var proxy = actorProxyFactory.CreateActorProxy<IPairActor>(new ActorId($"{request.From.ToUpper()}{request.To.ToUpper()}"), nameof(PairActor));
+            await proxy.Monitor(new MonitorPairRequest(request.From, request.To));
             return wallet.Investments.Last();
         }
     }

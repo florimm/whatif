@@ -16,9 +16,8 @@ namespace WhatIf.Api.Controllers
     {
         private readonly IMediator mediator;
         private readonly ILogger<UsersController> _logger;
-        private readonly DaprClient daprClient;
 
-        public UsersController(DaprClient daprClient, IMediator mediator, ILogger<UsersController> logger)
+        public UsersController(IMediator mediator, ILogger<UsersController> logger)
         {
             this.daprClient = daprClient;
             this.mediator = mediator;
@@ -41,47 +40,5 @@ namespace WhatIf.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{userId}/wallets")]
-        public async Task<ActionResult<GetAllWalletsForUserQueryResult>> Wallets([FromRoute] GetAllWalletsForUserQuery request)
-        {
-            System.Console.WriteLine($"UserId ======> : {request.UserId}");
-            var result = await mediator.Send(request);
-            return Ok(result);
-        }
-
-        [HttpPost("{userId}/wallets")]
-        public async Task<ActionResult<Guid>> CreateWallet([FromBody] CreateWalletRequest request)
-        {
-            var result = await mediator.Send(request);
-            return Ok(result);
-        }
-
-        [HttpPost("{userId}/wallets/{walletId}")]
-        public async Task<ActionResult> UpdateWallet([FromBody] UpdateWalletRequest request)
-        {
-            await mediator.Send(request);
-            return Ok();
-        }
-
-        [HttpGet("{userId}/wallets/{walletId}/investments")]
-        public async Task<ActionResult<GetWalletInvestmentsQueryResult>> Investments([FromRoute] GetWalletInvestmentsQuery request)
-        {
-            var result = await mediator.Send(request);
-            return Ok(result);
-        }
-
-        [HttpPost("{userId}/wallets/{walletId}/investments")]
-        public async Task<ActionResult> CreateInvestment([FromBody] CreateInvestmentRequest request)
-        {
-            await mediator.Send(request);
-            return Ok();
-        }
-
-        [HttpPost("{userId}/wallets/refresh")]
-        public async Task<ActionResult> Refresh([FromRoute] RefreshForUserAllWalletsRequest request)
-        {
-            await mediator.Send(request);
-            return Ok();
-        }
     }
 }

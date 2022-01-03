@@ -52,7 +52,7 @@ builder.Services.AddSwaggerGen(t => {
 });
 builder.Services.AddActors(config => {
     config.Actors.RegisterActor<PairActor>();
-    config.ActorIdleTimeout = TimeSpan.FromMinutes(20);
+    config.ActorIdleTimeout = TimeSpan.FromMinutes(5);
 });
 
 var app = builder.Build();

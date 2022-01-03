@@ -25,24 +25,21 @@ namespace WhatIf.Api.Commands.Wallet
         {
             var userId = userService.GetUserId();
             var userWallets = await daprClient.GetStateAsync<UserWallets>("statestore", $"{userId}-wallets");
-            System.Console.WriteLine($"refreshing wallets {userWallets != null}");
             if (userWallets != null)
             {
-                var investmentsPairs = new List<string>();
+                var investmentsPairs = new List<Tuple<string, string>>();
                 foreach (var wallet in userWallets.Wallets)
                 {
                     var investments = await daprClient.GetStateAsync<WalletInvestments>("statestore", wallet.Id.ToString());
                     if (investments != null && investments.Investments != null)
                     {
-                        investmentsPairs.AddRange(investments.Investments.Select(i => $"{i.To.ToUpper()}{i.From.ToUpper()}"));
+                        investmentsPairs.AddRange(investments.Investments.Select(i => new Tuple<string, string>(i.From, i.To)));
                     }
                 }
-                System.Console.WriteLine("------------------ Calling actors");
                 foreach (var pairs in investmentsPairs.Distinct())
                 {
-                    System.Console.WriteLine("pairs ======> : actor for" + pairs);
-                    var proxy = actorProxyFactory.CreateActorProxy<IPairActor>(new ActorId($"{pairs}"), nameof(PairActor));
-                    await proxy.Monitor(new MonitorPairRequest(pairs));
+                    var proxy = actorProxyFactory.CreateActorProxy<IPairActor>(new ActorId($"{pairs.Item1}{pairs.Item2}"), nameof(PairActor));
+                    await proxy.Monitor(new MonitorPairRequest(pairs.Item1, pairs.Item2));
                 }
             }
             return Unit.Value;
