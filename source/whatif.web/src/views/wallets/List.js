@@ -36,6 +36,8 @@ export default function List() {
 
     const handleRefresh = () => {
         queryClient.invalidateQueries(queryKeys.wallet.list);
+        queryClient.invalidateQueries(queryKeys.wallet.list);
+        queryClient.invalidateQueries(queryKeys.price);
     };
 
     if (isLoading) {

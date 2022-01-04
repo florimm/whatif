@@ -4,5 +4,5 @@ namespace WhatIf.Api.States
     public record UserWallets(string Email, List<Wallet> Wallets);
     public record Wallet(Guid Id, string Name);
     public record WalletInvestments(Guid Id, List<Investment> Investments);
-    public record Investment(string From, string To, double value, double Amount);
+    public record Investment(string From, string To, double Value, double Amount);
 }

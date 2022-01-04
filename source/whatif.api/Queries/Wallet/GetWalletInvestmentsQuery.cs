@@ -1,15 +1,11 @@
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Text.Json;
 using Dapr.Client;
 using MediatR;
-using WhatIf.Api.Actors;
 using WhatIf.Api.Services;
 using WhatIf.Api.States;
 
 namespace WhatIf.Api.Queries.Wallet
 {
-    public record WalletInvestment(string From, string To, double Amount);
+    public record WalletInvestment(string From, string To, double Amount, double Value);
     public record GetWalletInvestmentsQueryResult(string WalletName, List<WalletInvestment> Investments);
 
     public record GetWalletInvestmentsQuery(Guid WalletId) : IRequest<GetWalletInvestmentsQueryResult>;
@@ -39,7 +35,7 @@ namespace WhatIf.Api.Queries.Wallet
                 return new GetWalletInvestmentsQueryResult(currentWallet.Name, new List<WalletInvestment>());
             }
             return new GetWalletInvestmentsQueryResult(currentWallet.Name, 
-                walletInvestments.Value.Investments.Select(t => new WalletInvestment(t.From, t.To, t.Amount)).ToList());
+                walletInvestments.Value.Investments.Select(t => new WalletInvestment(t.From, t.To, t.Amount, t.Value)).ToList());
         }
     }
 

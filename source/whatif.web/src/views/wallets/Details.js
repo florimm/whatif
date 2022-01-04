@@ -6,12 +6,10 @@ import { Modal } from 'react-bootstrap';
 import { Icon } from '@iconify/react';
 import WalletForm from "./components/WalletForm";
 import { getData, postData } from "../../utilities/requests";
-import { useUserId } from '../../components/useUserId';
 import InvestmentRow from './components/InvestmentRow';
 import { queryKeys } from '../../constants';
 
 export default function Details() {
-    const userId = useUserId();
     const [show, setShow] = useState(false);
     const { walletId } = useParams();
     const queryClient = useQueryClient();
