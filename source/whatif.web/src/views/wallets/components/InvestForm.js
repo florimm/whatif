@@ -65,10 +65,11 @@ export default function InvestForm({ currentInvestment, onSave, onCancel }) {
                     <label htmlFor="total">Total</label>
                     <input type="number" className="form-control" id="total" placeholder="total" value={investment.total} readOnly={true} />
                 </div>
-                
                 <hr />
-                <button type="submit" className="btn btn-primary">Submit</button>
-                <button onClick={onCancel} className="btn btn-primary">Cancel</button>
+                <div className='d-flex'>
+                    <button type="submit" className="btn btn-primary m-2">Save</button>
+                    <button onClick={onCancel} className="btn btn-primary m-2">Cancel</button>
+                </div>
             </form>
         </div>
     )

@@ -22,10 +22,10 @@ export default function InvestmentRow({ investment, onSelect }) {
             <div className="d-flex gap-2 w-100 justify-content-between">
                 <div>
                     <div className='d-flex gap-2' style={{ alignItems: 'center' }}>
-                        <Icon icon={`cryptocurrency:${investment.from}`} /><h6 className="mb-0 p-1">{investment.from}</h6>
+                        <Icon icon={`cryptocurrency:${investment.from.toLowerCase()}`} /><h6 className="mb-0 p-1">{investment.from}</h6>
                     </div>
                     <div className='d-flex gap-2' style={{ alignItems: 'center' }}>
-                        <Icon icon={`cryptocurrency:${investment.to}`} /><h6 className="mb-0 p-1">{investment.to}</h6>
+                        <Icon icon={`cryptocurrency:${investment.to.toLowerCase()}`} /><h6 className="mb-0 p-1">{investment.to}</h6>
                     </div>
                 </div>
                 <div>

@@ -71,7 +71,8 @@ export default function Details() {
     }
 
     const saveInvestment = investment => {
-        addInvestmentMutation.mutate({ ...investment });
+        console.log('saving investment', investment);
+        addInvestmentMutation.mutate({ ...investment, walletId });
     }
 
     const handleRefresh = () => {
