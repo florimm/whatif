@@ -5,29 +5,43 @@ import PullToRefresh from 'react-simple-pull-to-refresh';
 import { Modal } from 'react-bootstrap';
 import { Icon } from '@iconify/react';
 import WalletForm from "./components/WalletForm";
+import InvestForm from './components/InvestForm';
 import { getData, postData } from "../../utilities/requests";
 import InvestmentRow from './components/InvestmentRow';
 import { queryKeys } from '../../constants';
 
 export default function Details() {
-    const [show, setShow] = useState(false);
+    const [modalForm, setModalForm] = useState(null);
+    const [ selectedInvestment, setSelectedInvestment ] = useState(null);
     const { walletId } = useParams();
     const queryClient = useQueryClient();
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => setModalForm(null);
     const onEditWallet = () => {
-        setShow(true);
+        setModalForm('wallet');
+    };
+
+    const onEditInvestment = () => {
+        setModalForm('investment');
     };
 
     const onAddInvestment = () => {
-        addInvestmentMutation.mutate({
-            walletId: walletId, 
-            From: 'eth', 
-            To: 'usdt', 
-            Value: 300,
-            Amount: 1
-        });
+        setModalForm('investment');
+    };
+
+    const onSelectInvestment = (investment) => {
+        setSelectedInvestment(investment);
     }
+
+    // const onAddInvestment = () => {
+    //     addInvestmentMutation.mutate({
+    //         walletId: walletId, 
+    //         From: 'eth', 
+    //         To: 'usdt', 
+    //         Value: 300,
+    //         Amount: 1
+    //     });
+    // }
 
     const { isLoading, data } = useQuery(
         [queryKeys.wallet.detail, walletId],
@@ -54,6 +68,10 @@ export default function Details() {
 
     const saveWallet = wallet => {
         mutation.mutate({ ...wallet, id: walletId });
+    }
+
+    const saveInvestment = investment => {
+        addInvestmentMutation.mutate({ ...investment });
     }
 
     const handleRefresh = () => {
@@ -93,17 +111,22 @@ export default function Details() {
                     </div>
                 </div>
                 {
-                    data?.investments.map(investment => <InvestmentRow key={investment.pair} pair={investment} />)
+                    data?.investments.map(investment => <InvestmentRow key={investment.pair} investment={investment} onSelect={onSelectInvestment} />)
                 }
                 </div>
                 <Link to="..">Back</Link>
             </PullToRefresh>
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={modalForm !== null} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Edit wallet</Modal.Title>
+                    <Modal.Title>{modalForm}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <WalletForm currentWallet={{ walletId: data.walletId, name: data.name }} onSave={saveWallet} onCancel={handleClose} />
+                    {
+                        modalForm === 'wallet' && <WalletForm currentWallet={{ walletId: data.walletId, name: data.name }} onSave={saveWallet} onCancel={handleClose} />
+                    }
+                    {
+                        modalForm === 'investment' && <InvestForm currentInvestment={{ walletId: data.walletId, ...selectedInvestment }} onSave={saveInvestment} onCancel={handleClose} />
+                    }
                 </Modal.Body>
             </Modal>
         </>
