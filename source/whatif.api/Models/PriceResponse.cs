@@ -1,4 +1,8 @@
 ﻿namespace WhatIf.Api.Models
 {
-    public record PriceResponse(string Symbol, double Price = 0);
+    public record PriceResponse()
+    {
+        public string? Symbol { get; init; }
+        public double? Price { get; init; }
+    };
 }

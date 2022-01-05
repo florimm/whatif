@@ -7,5 +7,6 @@ export const queryKeys = {
         list: 'investmentList',
         detail: 'investmentDetail',
     },
-    price: 'price'
+    price: 'price',
+    priceLookup: 'priceLookup',
 }

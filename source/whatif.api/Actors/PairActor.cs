@@ -61,7 +61,7 @@ namespace WhatIf.Api.Actors
             try
             {
                 System.Console.WriteLine("refresh for " + $"{from}{to}");
-                var result = await MakeRequest<PriceResponse>($"{from}{to}");
+                var result = await MakeRequest<PriceResponse>($"{from.ToUpper()}{to.ToUpper()}");
                 return result;
             }
             catch (Exception ex)
@@ -93,12 +93,12 @@ namespace WhatIf.Api.Actors
             var request = MonitorPairRequest.FromPair(pairSymbol);
             var response = await MakeRequest<PriceResponse>(request.ToPairRequest());
             System.Console.WriteLine($"==================================={response.Symbol} => {response.Price}");
-            await daprClient.PublishEventAsync("pubsub", "price-change", new PairPriceChanged(request.From, request.To, response.Price));
+            await daprClient.PublishEventAsync("pubsub", "price-change", new PairPriceChanged(request.From, request.To, response.Price.GetValueOrDefault(0)));
         }
 
         private async Task<T> MakeRequest<T>(string pair)
         {
-            var metadata = new Dictionary<string, string>() { ["path"] = $"ticker/price?symbol={pair}" };
+            var metadata = new Dictionary<string, string>() { ["path"] = $"ticker/price?symbol={pair.ToUpper()}" };
             var response = await daprClient.InvokeBindingAsync<object?, T>("binance-price", "get", null, metadata);
             return response;
         }
