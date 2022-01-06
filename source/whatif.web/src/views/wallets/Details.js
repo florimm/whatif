@@ -21,27 +21,14 @@ export default function Details() {
         setModalForm('wallet');
     };
 
-    const onEditInvestment = () => {
-        setModalForm('investment');
-    };
-
     const onAddInvestment = () => {
         setModalForm('investment');
     };
 
     const onSelectInvestment = (investment) => {
         setSelectedInvestment(investment);
+        setModalForm('investment');
     }
-
-    // const onAddInvestment = () => {
-    //     addInvestmentMutation.mutate({
-    //         walletId: walletId, 
-    //         From: 'eth', 
-    //         To: 'usdt', 
-    //         Value: 300,
-    //         Amount: 1
-    //     });
-    // }
 
     const { isLoading, data } = useQuery(
         [queryKeys.wallet.detail, walletId],
@@ -57,9 +44,9 @@ export default function Details() {
         },
     });
 
-    const addInvestmentMutation = useMutation(
+    const saveInvestmentMutation = useMutation(
         investment => postData(`wallets/${walletId}/investments`, investment), {
-        onSuccess: () => {
+        onSuccess: (d, v, c) => {
             queryClient.invalidateQueries(queryKeys.wallet.list);
             queryClient.invalidateQueries([queryKeys.wallet.detail, walletId]);
             handleClose();
@@ -72,13 +59,12 @@ export default function Details() {
 
     const saveInvestment = investment => {
         console.log('saving investment', investment);
-        addInvestmentMutation.mutate({ ...investment, walletId });
+        saveInvestmentMutation.mutate({ ...investment, walletId });
     }
 
     const handleRefresh = () => {
-        postData(`wallets/refresh`).then(() => {
-            queryClient.invalidateQueries([queryKeys.wallet.detail, walletId]);
-        });
+        queryClient.invalidateQueries([queryKeys.wallet.detail, walletId]);
+        queryClient.invalidateQueries(queryKeys.price);
     };
 
     if (isLoading) {
@@ -112,7 +98,7 @@ export default function Details() {
                     </div>
                 </div>
                 {
-                    data?.investments.map(investment => <InvestmentRow key={investment.pair} investment={investment} onSelect={onSelectInvestment} />)
+                    data?.investments.map(investment => <InvestmentRow key={investment.from} investment={investment} onSelect={onSelectInvestment} />)
                 }
                 </div>
                 <Link to="..">Back</Link>

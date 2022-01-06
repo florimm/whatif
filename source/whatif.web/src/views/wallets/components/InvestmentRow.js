@@ -4,10 +4,10 @@ import { getData } from "../../../utilities/requests";
 import { queryKeys } from '../../../constants';
 
 export default function InvestmentRow({ investment, onSelect }) {
-    const parRequest = `${investment.from.toUpperCase()}${investment.to.toUpperCase()}`;
+    const { from, to } = investment;
     const { data: currentValue, isFetching } = useQuery(
-        [queryKeys.price, parRequest],
-        (data) => getData(`pair-price/${data.queryKey[1]}`),
+        [queryKeys.price, from, to],
+        (data) => getData(`pair/${data.queryKey[1].toUpperCase()}-${data.queryKey[2].toUpperCase()}`),
         { refetchInterval: (1000 * 60) }
     );
 
@@ -18,7 +18,7 @@ export default function InvestmentRow({ investment, onSelect }) {
 
     const rowStyle = isFetching ? { borderBottom: '1px solid red' } : {};
     return (
-        <button onClick={handleSelection} style={rowStyle} className="list-group-item list-group-item-action d-flex gap-3 py-3">
+        <button onClick={handleSelection} style={rowStyle} title={currentValue?.date} className="list-group-item list-group-item-action d-flex gap-3 py-3">
             <div className="d-flex gap-2 w-100 justify-content-between">
                 <div>
                     <div className='d-flex gap-2' style={{ alignItems: 'center' }}>

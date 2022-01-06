@@ -9,7 +9,15 @@ namespace WhatIf.Api.Actors
 {
     public record PairPriceChanged(string From, string To, double Price) {
         public string Pair => $"{From.ToUpper()}{To.ToUpper()}";
-    };
+    }
+
+    public record PriceState()
+    {
+        public string? Symbol { get; init; }
+        public double? Price { get; init; }
+
+        public DateTime Date { get; set; }
+    }
 
     public class MonitorPairRequest
     {
@@ -38,8 +46,6 @@ namespace WhatIf.Api.Actors
         }
     };
     
-    public record PairState(string Symbol, int RefreshIntervalInSeconds);
-    
     public interface IPairActor : IActor
     {
         Task Monitor(MonitorPairRequest request);
@@ -61,7 +67,25 @@ namespace WhatIf.Api.Actors
             try
             {
                 System.Console.WriteLine("refresh for " + $"{from}{to}");
+                var lastPrice = await StateManager.GetStateAsync<PriceState>($"{from.ToUpper()}{to.ToUpper()}");
+                if (lastPrice?.Date.AddSeconds(20) > DateTime.UtcNow)
+                {
+                    return new PriceResponse
+                    {
+                        Symbol = lastPrice.Symbol,
+                        Price = lastPrice.Price,
+                        Date = lastPrice.Date
+                    };
+                }
+
                 var result = await MakeRequest<PriceResponse>($"{from.ToUpper()}{to.ToUpper()}");
+                await this.StateManager.SetStateAsync($"{from.ToUpper()}{to.ToUpper()}", new PriceState
+                {
+                    Symbol = result.Symbol,
+                    Price = result.Price,
+                    Date = DateTime.UtcNow
+                });
+                await SaveStateAsync();
                 return result;
             }
             catch (Exception ex)

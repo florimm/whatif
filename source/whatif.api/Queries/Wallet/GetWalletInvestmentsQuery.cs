@@ -5,8 +5,7 @@ using WhatIf.Api.States;
 
 namespace WhatIf.Api.Queries.Wallet
 {
-    public record WalletInvestment(string From, string To, double Amount, double Value);
-    public record GetWalletInvestmentsQueryResult(string WalletName, List<WalletInvestment> Investments);
+    public record GetWalletInvestmentsQueryResult(string WalletName, List<Investment> Investments);
 
     public record GetWalletInvestmentsQuery(Guid WalletId) : IRequest<GetWalletInvestmentsQueryResult>;
 
@@ -32,10 +31,10 @@ namespace WhatIf.Api.Queries.Wallet
             
             if (walletInvestments.Value is null)
             {
-                return new GetWalletInvestmentsQueryResult(currentWallet.Name, new List<WalletInvestment>());
+                return new GetWalletInvestmentsQueryResult(currentWallet.Name, new List<Investment>());
             }
             return new GetWalletInvestmentsQueryResult(currentWallet.Name, 
-                walletInvestments.Value.Investments.Select(t => new WalletInvestment(t.From, t.To, t.Amount, t.Value)).ToList());
+                walletInvestments.Value.Investments.Select(t => new Investment(t.From, t.To, t.Value, t.Amount)).ToList());
         }
     }
 

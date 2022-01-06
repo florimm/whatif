@@ -2,9 +2,7 @@ using Dapr.Client;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WhatIf.Api.Commands.User;
 using WhatIf.Api.Commands.Wallet;
-using WhatIf.Api.Models;
 using WhatIf.Api.Queries.Wallet;
 
 namespace WhatIf.Api.Controllers
@@ -54,14 +52,7 @@ namespace WhatIf.Api.Controllers
         }
 
         [HttpPost("{walletId}/investments")]
-        public async Task<ActionResult> CreateInvestment([FromBody] CreateInvestmentRequest request)
-        {
-            await mediator.Send(request);
-            return Ok();
-        }
-
-        [HttpPost("refresh")]
-        public async Task<ActionResult> Refresh([FromBody] RefreshForUserAllWalletsRequest request)
+        public async Task<ActionResult> CreateOrUpdateInvestment([FromBody] CreateOrUpdateInvestmentRequest request)
         {
             await mediator.Send(request);
             return Ok();

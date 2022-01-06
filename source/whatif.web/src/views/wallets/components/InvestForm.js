@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { useQuery, useQueryClient, useMutation } from "react-query";
-import { useParams } from "react-router-dom";
-import { getData, postData } from "../../../utilities/requests";
+import { useQuery, useQueryClient } from "react-query";
+import { getData } from "../../../utilities/requests";
 import { queryKeys } from '../../../constants';
 
 const initInvestForm = {
@@ -9,14 +8,14 @@ const initInvestForm = {
     to: 'USDT',
     value: 0,
     amount: 0,
-    total: 0,
+    total: '0 $',
 };
 
 export default function InvestForm({ currentInvestment, onSave, onCancel }) {
     const [investment, setInvestmentment] = useState(currentInvestment || initInvestForm);
     const queryClient = useQueryClient();
     const { from, to } = investment;
-    const { data: currentValue, isFetching } = useQuery(
+    const { data: currentValue } = useQuery(
         [queryKeys.priceLookup, from, to],
         (data) => {
             console.log('requesting price', data);
@@ -38,7 +37,7 @@ export default function InvestForm({ currentInvestment, onSave, onCancel }) {
     }
 
     const onAmountChange = e => {
-        setInvestmentment({ ...investment, amount: e.target.value, total: (e.target.value * currentValue?.price) });
+        setInvestmentment({ ...investment, amount: e.target.value, total: `${(e.target.value * currentValue?.price)} $` });
     }
 
 

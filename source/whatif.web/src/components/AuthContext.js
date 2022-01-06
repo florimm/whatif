@@ -1,5 +1,6 @@
 import * as React from "react";
 import { login } from "../utilities/requests";
+import jwtDecode from "jwt-decode";
 
 export const AuthContext = React.createContext();
 
@@ -22,8 +23,15 @@ export function AuthProvider({ children }) {
       localStorage.removeItem('token');
       return callback;
     };
+
+    const isTokenValid = () => {
+      const decodedJwt = jwtDecode(token);
+      const tokenExpireDate = decodedJwt.exp * 1000;
+      const result = tokenExpireDate > Date.now();
+      return result;
+    }
   
-    const value = { user, token, signIn, signOut };
+    const value = { user, token, signIn, signOut, isTokenValid };
   
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

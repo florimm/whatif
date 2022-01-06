@@ -18,7 +18,7 @@ function App() {
   const auth = useAuth();
   const navigate = useNavigate();
 
-  if (!auth.user || !auth.token) {
+  if (!auth.user || !auth.token || !auth.isTokenValid()) {
     return <Login />;
   }
 
