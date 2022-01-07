@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
+using Dapr.Client;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -67,8 +68,18 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCloudEvents();
-app.MapActorsHandlers();
-app.MapSubscribeHandler();
-app.MapControllers();
+
+app.UseEndpoints(x => {    
+    x.MapActorsHandlers();
+    x.MapSubscribeHandler();
+    x.MapControllers();
+    x.MapPost("price-change", async (PairPriceChanged data, DaprClient daprClient) =>
+    {
+        await daprClient.SaveStateAsync<PairPriceChanged>("statestore", data.Pair, data);
+        return Results.Ok();
+    })
+    .WithTopic("pubsub", "price-change");;
+});
+
 
 app.Run();
