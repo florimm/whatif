@@ -24,10 +24,10 @@ namespace WhatIf.Api.Actors
             
         }
 
-        public string From { get;set;}
-        public string To { get;set;}
-        public string PriceSource { get; set; }
-        public int RefreshIntervalInSeconds {get;set;} = 60;
+        public string From { get; init; }
+        public string To { get; init; }
+        public string PriceSource { get; init; }
+        public int RefreshIntervalInSeconds {get; init; } = 60;
 
         public static MonitorPairRequest FromBytes(byte[] data)
         {

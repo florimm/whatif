@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
 using Dapr.Client;
 using MediatR;
@@ -13,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<ITokenService>(new TokenService(builder.Configuration["Jwt:Key"], builder.Configuration["Jwt:Issuer"]));
 
 builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5178));
-// builder.Services.AddAuthorization();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
 {
     opt.TokenValidationParameters = new ()
@@ -29,7 +28,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService>(
-    s => new CurrentUserService(principal: s.GetService<IHttpContextAccessor>().HttpContext.User as ClaimsPrincipal));
+    s => new CurrentUserService(principal: (ClaimsPrincipal)s.GetService<IHttpContextAccessor>().HttpContext.User));
 
 var allowDaprForSwagger = "allowDaprForSwagger";
 
@@ -53,6 +52,7 @@ builder.Services.AddSwaggerGen(t => {
 });
 builder.Services.AddActors(config => {
     config.Actors.RegisterActor<PairActor>();
+    config.Actors.RegisterActor<MonitorActor>();
     config.ActorIdleTimeout = TimeSpan.FromMinutes(5);
 });
 

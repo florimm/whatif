@@ -24,13 +24,13 @@ namespace WhatIf.Api.Commands.Wallet
             switch (userWallets)
             {
                 case null:
-                    userWallets = new UserWallets(userId, new List<WhatIf.Api.States.Wallet> { new WhatIf.Api.States.Wallet(Guid.NewGuid(), request.Name) });
+                    userWallets = new UserWallets(userId, new List<States.Wallet> { new States.Wallet(Guid.NewGuid(), request.Name) });
                     break;
                 default:
-                    userWallets.Wallets.Add(new WhatIf.Api.States.Wallet(Guid.NewGuid(), request.Name));
+                    userWallets.Wallets.Add(new States.Wallet(Guid.NewGuid(), request.Name));
                     break;
             }
-            await daprClient.SaveStateAsync<UserWallets>("statestore", $"{userId}-wallets", userWallets);
+            await daprClient.SaveStateAsync("statestore", $"{userId}-wallets", userWallets);
             return userWallets.Wallets.Last().Id;
         }
     }

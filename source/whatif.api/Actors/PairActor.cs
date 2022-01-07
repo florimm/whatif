@@ -31,7 +31,6 @@ namespace WhatIf.Api.Actors
         {
             try
             {
-                System.Console.WriteLine("refresh for " + $"{from}{to}");
                 var lastPrice = await StateManager.GetStateAsync<PriceState>($"{from.ToUpper()}{to.ToUpper()}");
                 if (lastPrice?.Date.AddSeconds(20) > DateTime.UtcNow)
                 {
@@ -43,7 +42,7 @@ namespace WhatIf.Api.Actors
                     };
                 }
 
-                var result = await MakeRequest<PriceResponse>($"{from.ToUpper()}{to.ToUpper()}");
+                var result = await MakeRequest(from.ToUpper(), to.ToUpper());
                 await this.StateManager.SetStateAsync($"{from.ToUpper()}{to.ToUpper()}", new PriceState
                 {
                     Symbol = result.Symbol,
@@ -55,15 +54,16 @@ namespace WhatIf.Api.Actors
             }
             catch (Exception ex)
             {
-                System.Console.WriteLine("Error: " + ex.Message);
+                Console.WriteLine("Error: " + ex.Message);
                 throw new PairNotExistException();
             }
         }
 
-        private async Task<T> MakeRequest<T>(string pair)
+        private async Task<PriceResponse> MakeRequest(string from, string to)
         {
-            var metadata = new Dictionary<string, string>() { ["path"] = $"ticker/price?symbol={pair.ToUpper()}" };
-            var response = await daprClient.InvokeBindingAsync<object?, T>("binance-price", "get", null, metadata);
+            var priceSourceType = PriceRequesterType.FromValue("binance");
+            var metadata = priceSourceType.GetMetadata(from, to);
+            var response = await daprClient.InvokeBindingAsync<object?, PriceResponse>(priceSourceType.Name, "get", null, metadata);
             return response;
         }
     }

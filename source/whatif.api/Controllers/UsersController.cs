@@ -1,11 +1,7 @@
-using Dapr.Client;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WhatIf.Api.Commands.User;
-using WhatIf.Api.Commands.Wallet;
-using WhatIf.Api.Models;
-using WhatIf.Api.Queries.Wallet;
 
 namespace WhatIf.Api.Controllers
 {

@@ -1,8 +1,5 @@
-using Dapr.Actors;
-using Dapr.Actors.Client;
 using Dapr.Client;
 using MediatR;
-using WhatIf.Api.Actors;
 using WhatIf.Api.Exceptions;
 using WhatIf.Api.Services;
 using WhatIf.Api.States;
@@ -32,10 +29,9 @@ namespace WhatIf.Api.Commands.Wallet
             }
             
             var updatedUserWallets = userWallets with {
-                                        Wallets = userWallets.Wallets
-                                            .Replace(w => w.Id == request.Id, x => x with { Name = request.Name })
+                                        Wallets = userWallets.Wallets.Replace(w => w.Id == request.Id, x => x with { Name = request.Name })
                                     };
-            await daprClient.SaveStateAsync<UserWallets>("statestore", $"{userId}-wallets", updatedUserWallets);
+            await daprClient.SaveStateAsync("statestore", $"{userId}-wallets", updatedUserWallets);
             return Unit.Value;
         }
     }

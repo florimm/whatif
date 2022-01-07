@@ -1,4 +1,3 @@
-using Dapr.Client;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,14 +12,10 @@ namespace WhatIf.Api.Controllers
     public class WalletsController : ControllerBase
     {
         private readonly IMediator mediator;
-        private readonly ILogger<WalletsController> logger;
-        private readonly DaprClient daprClient;
 
-        public WalletsController(DaprClient daprClient, IMediator mediator, ILogger<WalletsController> logger)
+        public WalletsController(IMediator mediator)
         {
-            this.daprClient = daprClient;
             this.mediator = mediator;
-            this.logger = logger;
         }
 
         [HttpGet()]

@@ -2,7 +2,6 @@ namespace WhatIf.Api.Utils
 {
     public static class LinqExtensions
     {
-        
         public static List<T> Replace<T>(this List<T> source, Predicate<T> predicate, Func<T, T> replacement)
         {
             var index = source.FindIndex(predicate);
@@ -14,5 +13,4 @@ namespace WhatIf.Api.Utils
             return source;
         }
     }
-    
 }

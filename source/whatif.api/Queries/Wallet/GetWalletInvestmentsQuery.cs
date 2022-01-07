@@ -25,7 +25,6 @@ namespace WhatIf.Api.Queries.Wallet
             string userId = currentUser.GetUserId();
             var userWallets = await daprClient.GetStateAsync<UserWallets>("statestore", $"{userId}-wallets");
             var currentWallet = userWallets.Wallets.Single(t => t.Id == request.WalletId);
-            System.Console.WriteLine($"request.WalletId.ToString() {request.WalletId}");
 
             var walletInvestments = await daprClient.GetStateEntryAsync<WalletInvestments>("statestore", request.WalletId.ToString());
             

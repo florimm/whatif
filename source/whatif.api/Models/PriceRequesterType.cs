@@ -8,8 +8,8 @@ namespace WhatIf.Api.Models
             this.Name = name;
         }
 
-        public static readonly BinancePriceRequester Binance = new BinancePriceRequester();
-        public static readonly CoinGeckoRequester CoinGecko = new CoinGeckoRequester();
+        public static readonly BinancePriceRequester Binance = new();
+        public static readonly CoinGeckoRequester CoinGecko = new();
 
         public static PriceRequesterType FromValue(string name)
         {

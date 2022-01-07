@@ -1,8 +1,6 @@
-using Dapr.Actors;
 using Dapr.Actors.Client;
 using Dapr.Client;
 using MediatR;
-using WhatIf.Api.Actors;
 using WhatIf.Api.States;
 
 namespace WhatIf.Api.Commands.Wallet
@@ -12,12 +10,10 @@ namespace WhatIf.Api.Commands.Wallet
     public class CreateOrUpdateInvestmentHandler : IRequestHandler<CreateOrUpdateInvestmentRequest, Investment>
     {
         private readonly DaprClient daprClient;
-        private readonly IActorProxyFactory actorProxyFactory;
 
-        public CreateOrUpdateInvestmentHandler(DaprClient daprClient, IActorProxyFactory actorProxyFactory)
+        public CreateOrUpdateInvestmentHandler(DaprClient daprClient)
         {
             this.daprClient = daprClient;
-            this.actorProxyFactory = actorProxyFactory;
         }
 
         public async Task<Investment> Handle(CreateOrUpdateInvestmentRequest request, CancellationToken cancellationToken)

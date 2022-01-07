@@ -5,7 +5,8 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
 namespace WhatIf.Api.Services
-{    public interface ITokenService
+{   
+    public interface ITokenService
     {
         string BuildToken(Guid userId, string email);
     }
@@ -16,7 +17,6 @@ namespace WhatIf.Api.Services
         private string key;
         public TokenService(string key, string issuer)
         {
-            System.Console.WriteLine($"================================{key}");
             this.issuer = issuer;
             this.key = key;
         }

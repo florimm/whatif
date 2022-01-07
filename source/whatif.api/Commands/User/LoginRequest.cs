@@ -1,8 +1,6 @@
-using CSharpFunctionalExtensions;
 using Dapr.Client;
 using MediatR;
 using WhatIf.Api.Services;
-using WhatIf.Api.States;
 using WhatIf.Api.Utils;
 
 namespace WhatIf.Api.Commands.User
@@ -24,8 +22,8 @@ namespace WhatIf.Api.Commands.User
         
         public async Task<LoginResponse> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
-            var user = await daprClient.GetStateAsync<WhatIf.Api.States.User>("statestore", request.Email);
-            if (user == null || user.Password != request.Password.Crypt())
+            var user = await daprClient.GetStateAsync<States.User>("statestore", request.Email);
+            if (user == null || user.Password != request.Password.Encrypt())
             {
                 throw new UnauthorizedAccessException("Invalid credentials");
             }
