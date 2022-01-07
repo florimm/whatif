@@ -25,6 +25,9 @@ export function AuthProvider({ children }) {
     };
 
     const isTokenValid = () => {
+      if (!token) {
+        return false;
+      }
       const decodedJwt = jwtDecode(token);
       const tokenExpireDate = decodedJwt.exp * 1000;
       const result = tokenExpireDate > Date.now();
