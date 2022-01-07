@@ -78,9 +78,9 @@ namespace WhatIf.Api.Actors
 
         private async Task<PriceResponse> MakeRequest(MonitorPairRequest request)
         {
-            var priceSource = PriceRequesterType.FromValue(request.PriceSource);
-            var metadata = priceSource.GetMetadata(request.From, request.To);
-            var response = await daprClient.InvokeBindingAsync<object?, PriceResponse>(priceSource.Name, "get", null, metadata);
+            var priceSourceType = PriceRequesterType.FromValue(request.PriceSource);
+            var metadata = priceSourceType.GetMetadata(request.From, request.To);
+            var response = await daprClient.InvokeBindingAsync<object?, PriceResponse>(priceSourceType.Name, "get", null, metadata);
             return response;
         }
     }

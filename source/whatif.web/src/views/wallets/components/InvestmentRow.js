@@ -7,7 +7,7 @@ export default function InvestmentRow({ investment, onSelect }) {
     const { from, to } = investment;
     const { data: currentValue, isFetching } = useQuery(
         [queryKeys.price, from, to],
-        (data) => getData(`pair/${data.queryKey[1].toUpperCase()}-${data.queryKey[2].toUpperCase()}`),
+        (data) => getData(`pricechange/pair/${data.queryKey[1].toUpperCase()}-${data.queryKey[2].toUpperCase()}`),
         { refetchInterval: (1000 * 60) }
     );
 

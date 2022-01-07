@@ -17,14 +17,10 @@ export default function InvestForm({ currentInvestment, onSave, onCancel }) {
     const { from, to } = investment;
     const { data: currentValue } = useQuery(
         [queryKeys.priceLookup, from, to],
-        (data) => {
-            console.log('requesting price', data);
-            if (data.queryKey[1] && data.queryKey[2]) {
-                return getData(`pair/${data.queryKey[1].toLowerCase()}-${data.queryKey[2].toLowerCase()}`);
-            }
-            return Promise.resolve({ price: 0 });
-        },
-        { enabled: (!!from && !!to), onSuccess: (data) => { setInvestmentment({ ...investment, value: data.price })} }
+        (data) => getData(`pair/${data.queryKey[1].toLowerCase()}-${data.queryKey[2].toLowerCase()}`),
+        {
+            enabled: (!!from && !!to),
+            onSuccess: (data) => { setInvestmentment({ ...investment, value: data.price }); } }
     );
     
     const submitForm = e => {
@@ -45,12 +41,12 @@ export default function InvestForm({ currentInvestment, onSave, onCancel }) {
         <div>
             <form onSubmit={submitForm}>
                 <div className="form-group">
-                    <label htmlFor="from">From</label>
+                    <label htmlFor="from">Crupto</label>
                     <input type="text" className="form-control" id="from" placeholder="From" value={investment.from} onBlur={handleOnBlur} onChange={e => setInvestmentment({ ...investment, from: e.target.value })} />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="to">To</label>
-                    <input type="text" className="form-control" id="to" placeholder="To" value={investment.to} onBlur={handleOnBlur} onChange={e => setInvestmentment({ ...investment, to: e.target.value })} />
+                    <label htmlFor="to">Stable coin</label>
+                    <input type="text" readOnly={true} className="form-control" id="to" placeholder="To" value={investment.to} onBlur={handleOnBlur} onChange={e => setInvestmentment({ ...investment, to: e.target.value })} />
                 </div>
                 <div className="form-group">
                     <label htmlFor="value">Value</label>
