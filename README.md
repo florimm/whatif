@@ -17,6 +17,7 @@ The goals of this app are:
 ## Running the app
 * Command to run API (from the whatif.api folder):
     ```dapr run --app-id whatifapi --app-port 5178 --dapr-http-port 3602 --dapr-grpc-port 60002 --log-level Debug --components-path C:\projects\what-if\source\whatif.api\dapr\components dotnet run```
+    replase --components-path with your path
 * Command to run frontend (from the whatif.web folder):
     ```yarn start``` or ```npm run start```
 
