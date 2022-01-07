@@ -25,7 +25,7 @@ namespace WhatIf.Api.Controllers
             try
             {
                 var proxy = actorProxyFactory.CreateActorProxy<IPairActor>(new ActorId($"{from.ToUpper()}{to.ToUpper()}"), nameof(PairActor));
-                var result = await proxy.CurrentPrice(from, to);
+                var result = await proxy.CurrentPrice("binance", from, to);
                 return Ok(result);
             }
             catch(PairNotExistException ex)
