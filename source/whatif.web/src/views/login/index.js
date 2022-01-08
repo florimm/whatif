@@ -26,7 +26,7 @@ function Login() {
                 console.log('error', error);
             });
     }
-    if (auth.user && auth.token && auth.isTokenValid()) {
+    if (auth.isTokenValid()) {
         return (
         <div>
             <h1>You are logged in as {auth.user}</h1>

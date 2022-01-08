@@ -35,5 +35,11 @@ namespace WhatIf.Api.Controllers
             return Ok(result);
         }
 
+        [HttpPut()]
+        public async Task<ActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)
+        {
+            var result = await mediator.Send(request);
+            return Ok(result);
+        }
     }
 }

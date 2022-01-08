@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
     };
 
     const isTokenValid = () => {
-      if (!token) {
+      if (!token || !user) {
         return false;
       }
       const decodedJwt = jwtDecode(token);

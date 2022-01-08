@@ -5,6 +5,7 @@ namespace WhatIf.Api.Services
 {
     public interface ICurrentUserService {
         string GetUserId();
+        string GetEmail();
     }
     public class CurrentUserService : ICurrentUserService
     {
@@ -17,6 +18,11 @@ namespace WhatIf.Api.Services
         public string GetUserId()
         {
             return principal.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
+
+        public string GetEmail()
+        {
+            return principal.FindFirstValue(ClaimTypes.Email);
         }
     }
 }

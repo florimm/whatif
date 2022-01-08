@@ -8,6 +8,7 @@ import Home from './views/home';
 import Wallets from './views/wallets';
 import About from './views/about';
 import Login from './views/login';
+import Profile from './views/profile';
 import { RequireAuth } from './components/RequireAuth';
 import { useAuth } from './components/useAuth';
 import NotFound from './views/not-found';
@@ -18,9 +19,7 @@ function App() {
   const auth = useAuth();
   const navigate = useNavigate();
 
-  if (!auth.user || !auth.token || !auth.isTokenValid()) {
-    return <Login />;
-  }
+  const isUserAuth = auth.isTokenValid();
 
   const signOut = () => {
     return auth.signOut(() => {
@@ -41,16 +40,33 @@ function App() {
               <li className="nav-item">
                 <Link className="nav-link" to="/">Home</Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/wallets">Wallets</Link>
-              </li>
+              {
+                isUserAuth &&
+                <li className="nav-item">
+                  <Link className="nav-link" to="/profile">Profile</Link>
+                </li>
+              }
+              {
+                isUserAuth &&
+                <li className="nav-item">
+                  <Link className="nav-link" to="/wallets">Wallets</Link>
+                </li>
+              }
               <li className="nav-item">
                 <Link className="nav-link" to="/about">About</Link>
               </li>
             </ul>
-            <form className="d-flex">
-              <button className="btn btn-outline-danger" onClick={signOut} >Logout</button>
-            </form>
+            {
+              isUserAuth ? (
+                <form className="d-flex">
+                  <button className="btn btn-outline-danger" onClick={signOut} >Logout</button>
+                </form>
+              ) : (
+                <form className="d-flex">
+                  <button className="btn btn-outline-danger" onClick={() => navigate('/login')} >Login</button>
+                </form>
+              )
+            }
           </div>
         </div>
       </nav>
@@ -60,7 +76,9 @@ function App() {
                 <Route path="/">
                   <Route index element={<Home />} />
                   <Route path="about" element={<About />} />
+                  <Route path="profile" element={<RequireAuth><Profile /></RequireAuth>} />
                   <Route path="wallets/*" element={<RequireAuth><Wallets /></RequireAuth>} />
+                  <Route path="login*" element={<Login />} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
               </Routes>
