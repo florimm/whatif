@@ -31,14 +31,14 @@ namespace WhatIf.Api.Actors
         {
             try
             {
-                var lastPrice = await StateManager.GetStateAsync<PriceState>($"{from.ToUpper()}{to.ToUpper()}");
-                if (lastPrice?.Date.AddSeconds(20) > DateTime.UtcNow)
+                var lastPrice = await StateManager.TryGetStateAsync<PriceState>($"{from.ToUpper()}{to.ToUpper()}");
+                if (lastPrice.HasValue && lastPrice.Value.Date.AddSeconds(20) > DateTime.UtcNow)
                 {
                     return new PriceResponse
                     {
-                        Symbol = lastPrice.Symbol,
-                        Price = lastPrice.Price,
-                        Date = lastPrice.Date
+                        Symbol = lastPrice.Value.Symbol,
+                        Price = lastPrice.Value.Price,
+                        Date = lastPrice.Value.Date
                     };
                 }
 
