@@ -8,8 +8,8 @@ namespace WhatIf.Api.Models
             this.Name = name;
         }
 
-        public static readonly BinancePriceRequester Binance = new();
-        public static readonly CoinGeckoRequester CoinGecko = new();
+        public static readonly PriceRequesterType Binance = new BinancePriceRequester();
+        public static readonly PriceRequesterType CoinGecko = new CoinGeckoRequester();
 
         public static PriceRequesterType FromValue(string name)
         {
@@ -26,7 +26,7 @@ namespace WhatIf.Api.Models
         
         public abstract Dictionary<string, string> GetMetadata(string from, string to);
 
-        public class BinancePriceRequester : PriceRequesterType
+        private class BinancePriceRequester : PriceRequesterType
         {
             public BinancePriceRequester() : base("binance-price")
             {
@@ -39,7 +39,7 @@ namespace WhatIf.Api.Models
             }
         }
 
-        public class CoinGeckoRequester : PriceRequesterType
+        private class CoinGeckoRequester : PriceRequesterType
         {
             public CoinGeckoRequester() : base("gecko-price")
             {

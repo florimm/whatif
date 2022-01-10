@@ -63,7 +63,7 @@ function App() {
                 </form>
               ) : (
                 <form className="d-flex">
-                  <button className="btn btn-outline-danger" onClick={() => navigate('/login')} >Login</button>
+                  <button className="btn btn-outline-primary" onClick={() => navigate('/login')} >Login</button>
                 </form>
               )
             }
