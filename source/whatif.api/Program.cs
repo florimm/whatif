@@ -9,7 +9,8 @@ using WhatIf.Api.Actors;
 using WhatIf.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSingleton<ITokenService>(new TokenService(builder.Configuration["Jwt:Key"], builder.Configuration["Jwt:Issuer"]));
+builder.Services.AddSingleton<ITokenService>(
+    new TokenService(builder.Configuration["Jwt:Key"], builder.Configuration["Jwt:Issuer"]));
 
 builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5178));
 
