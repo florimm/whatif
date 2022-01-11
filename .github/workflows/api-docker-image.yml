@@ -16,4 +16,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build --tag whatifapie:$(date +%s) --file source/whatif.api/Dockerfile .
+      run: docker build --tag whatifapie:$(date +%s) --file source/whatif.api/Dockerfile source/whatif.api
