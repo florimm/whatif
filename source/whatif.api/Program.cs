@@ -49,11 +49,13 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers()
     .AddDapr();
+
 builder.Services.AddMediatR(typeof(Program).Assembly);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(t => {
     t.AddServer(new OpenApiServer { Url = "http://localhost:3602/v1.0/invoke/whatifapi/method" });
 });
+
 builder.Services.AddActors(config => {
     config.Actors.RegisterActor<PairActor>();
     config.Actors.RegisterActor<MonitorActor>();
