@@ -3,7 +3,7 @@ name: Docker Image CI
 on:
   push:
     branches: [ main ]
-    paths: [source/whatif.api/**]
+    paths: [source/whatif.web/**]
   pull_request:
     branches: [ main ]
 
@@ -16,4 +16,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build --tag whatifapi:$(date +%s) --file source/whatif.api/Dockerfile source/whatif.api
+      run: docker build --tag whatifweb:$(date +%s) --file source/whatif.web/Dockerfile source/whatif.web
