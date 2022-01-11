@@ -48,5 +48,6 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
+        context: source/whatif.api
         tags: ${{ steps.docker_meta.outputs.tags }}
         file: source/whatif.api/Dockerfile
