@@ -12,7 +12,7 @@ import { queryKeys } from '../../constants';
 
 export default function Details() {
     const [modalForm, setModalForm] = useState(null);
-    const [ selectedInvestment, setSelectedInvestment ] = useState(null);
+    const [selectedInvestment, setSelectedInvestment] = useState(null);
     const { walletId } = useParams();
     const queryClient = useQueryClient();
 
@@ -28,6 +28,11 @@ export default function Details() {
     const onSelectInvestment = (investment) => {
         setSelectedInvestment(investment);
         setModalForm('investment');
+    }
+
+    const onClickMonitoring = (investment) => {
+        setSelectedInvestment(investment);
+        setModalForm('monitoring');
     }
 
     const { isLoading, data } = useQuery(
@@ -76,30 +81,36 @@ export default function Details() {
     return (
         <>
             <PullToRefresh onRefresh={handleRefresh}>
-            <div className="list-group">
-                <div className="d-flex bd-highlight">
-                    <div className="p-2 w-100 bd-highlight"><h3>Wallet list</h3></div>
-                    <div className="d-flex p-2 flex-shrink-1 bd-highlight">
-                        <button className="btn btn-light" onClick={onEditWallet}>
-                            <Icon style={{ fontSize: '24px' }} icon="ant-design:edit-filled" />
-                        </button>
-                        <button className="btn btn-light" onClick={onAddInvestment}>
-                            <Icon style={{ fontSize: '24px' }} icon="ant-design:file-add-filled" />
-                        </button>
-                    </div>
-                </div>
-                <div className="list-group-item list-group-item-action d-flex gap-4 py-3" aria-current="true">
-                    <div className="d-flex gap-2 w-100 justify-content-between">
-                        <div>
-                            <h6 className="mb-0">Pairs</h6>
+                <div className="list-group">
+                    <div className="d-flex bd-highlight">
+                        <div className="p-2 w-100 bd-highlight"><h3>Wallet list</h3></div>
+                        <div className="d-flex p-2 flex-shrink-1 bd-highlight">
+                            <button className="btn btn-light" onClick={onEditWallet}>
+                                <Icon style={{ fontSize: '24px' }} icon="ant-design:edit-filled" />
+                            </button>
+                            <button className="btn btn-light" onClick={onAddInvestment}>
+                                <Icon style={{ fontSize: '24px' }} icon="ant-design:file-add-filled" />
+                            </button>
                         </div>
-                        <small className="opacity-50 text-nowrap">Investment</small>
-                        <small className="opacity-50 text-nowrap">Holdings</small>
                     </div>
-                </div>
-                {
-                    data?.investments.map(investment => <InvestmentRow key={investment.from} investment={investment} onSelect={onSelectInvestment} />)
-                }
+                    <div className="list-group-item list-group-item-action d-flex gap-4 py-3" aria-current="true">
+                        <div className="d-flex gap-2 w-100 justify-content-between">
+                            <div>
+                                <h6 className="mb-0">Pairs</h6>
+                            </div>
+                            <small className="opacity-50 text-nowrap">Investment</small>
+                            <small className="opacity-50 text-nowrap">Holdings</small>
+                        </div>
+                    </div>
+                    {
+                        data?.investments.map(investment =>
+                            <InvestmentRow
+                                key={investment.from}
+                                investment={investment}
+                                onSelect={onSelectInvestment}
+                                onClickMonitoring={onClickMonitoring}
+                            />)
+                    }
                 </div>
                 <Link to="..">Back</Link>
             </PullToRefresh>
@@ -113,6 +124,9 @@ export default function Details() {
                     }
                     {
                         modalForm === 'investment' && <InvestForm currentInvestment={{ walletId: data.walletId, ...selectedInvestment }} onSave={saveInvestment} onCancel={handleClose} />
+                    }
+                    {
+                        modalForm === 'monitoring' && <InvestForm currentInvestment={{ walletId: data.walletId, ...selectedInvestment }} onSave={saveInvestment} onCancel={handleClose} />
                     }
                 </Modal.Body>
             </Modal>

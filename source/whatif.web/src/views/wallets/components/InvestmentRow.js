@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import { getData } from "../../../utilities/requests";
 import { queryKeys } from '../../../constants';
 
-export default function InvestmentRow({ investment, onSelect }) {
+export default function InvestmentRow({ investment, onSelect, onClickMonitoring }) {
     const { from, to } = investment;
     const { data: currentValue, isFetching } = useQuery(
         [queryKeys.price, from, to],
@@ -18,7 +18,7 @@ export default function InvestmentRow({ investment, onSelect }) {
 
     const rowStyle = isFetching ? { borderBottom: '1px solid red' } : {};
     return (
-        <button onClick={handleSelection} style={rowStyle} title={currentValue?.date} className="list-group-item list-group-item-action d-flex gap-3 py-3">
+        <div style={rowStyle} title={currentValue?.date} className="list-group-item list-group-item-action d-flex gap-3 py-3">
             <div className="d-flex gap-2 w-100 justify-content-between">
                 <div>
                     <div className='d-flex gap-2' style={{ alignItems: 'center' }}>
@@ -38,7 +38,15 @@ export default function InvestmentRow({ investment, onSelect }) {
                     <br />
                     <small className="opacity-50 text-nowrap">{currentValue?.price.toFixed(2)} $</small>
                 </div>
+                <div>
+                    <button className="btn btn-light" onClick={handleSelection}>
+                        <Icon style={{ fontSize: '24px' }} icon="ant-design:edit-filled" />
+                    </button>
+                    <button className="btn btn-light" onClick={onClickMonitoring}>
+                        <Icon style={{ fontSize: '24px' }} icon="eos-icons:monitoring" />
+                    </button>
+                </div>
             </div>
-        </button>
+        </div>
     )
 }
