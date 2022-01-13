@@ -51,7 +51,7 @@ export default function Details() {
 
     const saveInvestmentMutation = useMutation(
         investment => postData(`wallets/${walletId}/investments`, investment), {
-        onSuccess: (d, v, c) => {
+        onSuccess: () => {
             queryClient.invalidateQueries(queryKeys.wallet.list);
             queryClient.invalidateQueries([queryKeys.wallet.detail, walletId]);
             handleClose();

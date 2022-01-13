@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  whatifapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+
+  whatifweb:
+    ports:
+    - 3000:80
+
+  whatifapi-dapr:
+    command: ["./daprd",
+      "-app-id", "whatifapi",
+      "-app-port", "80",
+      "-components-path", "/components"
+      ]
+    volumes:
+      - "../whatif.api/dapr/components/:/components"
+ 
+  redis:
+    ports:
+    - "6379:6379"
+  
+  zipkin:
+    ports:
+      - "9411:9411"
