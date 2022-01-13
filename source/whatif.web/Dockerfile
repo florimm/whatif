@@ -5,7 +5,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 COPY package.json /usr/src/app/package.json
-COPY yarn.lock /usr/src/app/yarn.lock
+# COPY yarn.lock /usr/src/app/yarn.lock
 RUN npm config set unsafe-perm true
 RUN yarn
 RUN npm install react-scripts@3.4.1 -g
