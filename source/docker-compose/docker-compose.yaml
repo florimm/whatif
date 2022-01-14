@@ -1,21 +1,21 @@
 services:
   whatifweb:
-    image: ghcr.io/florimm/whatifweb:main
+    image: whatifweb
     container_name: whatifweb
     build:
-      context: ../
-      dockerfile: whatif.web/Dockerfile
+      context: ../whatif.web
+      dockerfile: ${PWD:-.}/Dockerfile
     depends_on:
       - whatifapi
 
   whatifapi:
-    image: ghcr.io/florimm/whatifapi:main
+    image: whatifapi
     container_name: whatifapi
     build:
-      context: ../
-      dockerfile: whatif.api/Dockerfile
-    depends_on:
-      - redis
+      context: ../whatif.api
+      dockerfile: ${PWD:-.}/Dockerfile
+    # depends_on:
+    #   - redis
   
   whatifapi-dapr:
     container_name: whatifapi-dapr
@@ -24,14 +24,20 @@ services:
     depends_on:
       - whatifapi
 
+  placement:
+    image: "daprio/dapr"
+    command: ["./placement", "-port", "50006"]
+    ports:
+      - "50006:50006"
+
 # Components
   #Pub-Sub & State
-  redis:
-    container_name: redis
-    image: redis:alpine
+  # redis:
+  #   container_name: redis
+  #   image: redis:alpine
 
   # Observability
-  zipkin:
-    container_name: zipkin
-    image: openzipkin/zipkin-slim
+  # zipkin:
+  #   container_name: zipkin
+  #   image: openzipkin/zipkin-slim
 # Components

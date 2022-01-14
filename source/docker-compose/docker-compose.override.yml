@@ -5,7 +5,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "80"
+      - "5178"
 
   whatifweb:
     ports:
@@ -14,16 +14,17 @@ services:
   whatifapi-dapr:
     command: ["./daprd",
       "-app-id", "whatifapi",
-      "-app-port", "80",
+      "-app-port", "5178",
+      "-placement-host-address", "placement:50006",
       "-components-path", "/components"
       ]
     volumes:
       - "../whatif.api/dapr/components/:/components"
- 
-  redis:
-    ports:
-    - "6379:6379"
-  
-  zipkin:
-    ports:
-      - "9411:9411"
+
+  # redis:
+  #   ports:
+  #   - "6379:6379"
+
+  # zipkin:
+  #   ports:
+  #     - "9411:9411"
