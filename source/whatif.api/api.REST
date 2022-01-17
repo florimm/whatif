@@ -1,5 +1,5 @@
 
-POST http://localhost:3602/v1.0/invoke/whatifapi/method/users HTTP/1.1
+POST http://localhost:64349/v1.0/invoke/whatifapi/method/users HTTP/1.1
 content-type: application/json
 
 {
@@ -12,7 +12,7 @@ content-type: application/json
 ###
 
 # @name login
-POST http://localhost:3602/v1.0/invoke/whatifapi/method/users/login HTTP/1.1
+POST http://localhost:64349/v1.0/invoke/whatifapi/method/users/login HTTP/1.1
 content-type: application/json
 
 {
@@ -23,11 +23,11 @@ content-type: application/json
 
 @authToken = {{login.response.body.token}}
 
-GET http://localhost:3602/v1.0/invoke/whatifapi/method/wallets
+GET http://localhost:64349/v1.0/invoke/whatifapi/method/wallets
 Authorization: Bearer {{authToken}}
 ###
 
-POST http://localhost:3602/v1.0/invoke/whatifapi/method/wallets
+POST http://localhost:64349/v1.0/invoke/whatifapi/method/wallets
 Authorization: Bearer {{authToken}}
 content-type: application/json
 
@@ -37,7 +37,7 @@ content-type: application/json
 
 ###
 
-POST http://localhost:3602/v1.0/invoke/whatifapi/method/wallets/c8748c8e-a47b-467f-9f8c-52da5ad848df
+POST http://localhost:64349/v1.0/invoke/whatifapi/method/wallets/c8748c8e-a47b-467f-9f8c-52da5ad848df
 Authorization: Bearer {{authToken}}
 content-type: application/json
 
@@ -48,12 +48,12 @@ content-type: application/json
 
 ###
 
-GET http://localhost:3602/v1.0/invoke/whatifapi/method/wallets/c8748c8e-a47b-467f-9f8c-52da5ad848df/investments
+GET http://localhost:64349/v1.0/invoke/whatifapi/method/wallets/c8748c8e-a47b-467f-9f8c-52da5ad848df/investments
 Authorization: Bearer {{authToken}}
 ###
 
 
-POST http://localhost:3602/v1.0/invoke/whatifapi/method/wallets/c8748c8e-a47b-467f-9f8c-52da5ad848df/investments
+POST http://localhost:64349/v1.0/invoke/whatifapi/method/wallets/c8748c8e-a47b-467f-9f8c-52da5ad848df/investments
 Authorization: Bearer {{authToken}}
 
 {
@@ -66,7 +66,7 @@ Authorization: Bearer {{authToken}}
 ###
 
 ###
-POST http://localhost:3602/v1.0/invoke/whatifapi/method/wallets/refresh
+POST http://localhost:64349/v1.0/invoke/whatifapi/method/wallets/refresh
 Authorization: Bearer {{authToken}}
 content-type: application/json
 
@@ -74,10 +74,10 @@ content-type: application/json
 }
 
 ###
-GET http://localhost:3602/v1.0/invoke/whatifapi/method/pair-price/ETHUSDT
+GET http://localhost:64349/v1.0/invoke/whatifapi/method/pair-price/ETHUSDT
 Authorization: Bearer {{authToken}}
 
 ###
-GET http://localhost:3602/v1.0/invoke/whatifapi/method/pair/eth-usdt
+GET http://localhost:64349/v1.0/invoke/whatifapi/method/pair/eth-usdt
 Authorization: Bearer {{authToken}}
 

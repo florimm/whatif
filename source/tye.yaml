@@ -1,0 +1,10 @@
+name: dapr
+extensions:
+- name: dapr
+  log-level: debug
+  components-path: dapr/components
+services:
+- name: whatifapi
+  project: whatif.api/WhatIf.Api.csproj
+  bindings:
+  - port: 5000

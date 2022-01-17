@@ -13,7 +13,7 @@ builder.Services
     .AddSingleton<ITokenService>(
         new TokenService(builder.Configuration["Jwt:Key"], builder.Configuration["Jwt:Issuer"]));
 
-builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5178));
+// builder.WebHost.ConfigureKestrel(options => options.ListenLocalhost(5178));
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -52,9 +52,9 @@ builder.Services.AddControllers()
 
 builder.Services.AddMediatR(typeof(Program).Assembly);
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(t => {
-    t.AddServer(new OpenApiServer { Url = "http://localhost:3602/v1.0/invoke/whatifapi/method" });
-});
+// builder.Services.AddSwaggerGen(t => {
+//     t.AddServer(new OpenApiServer { Url = "http://localhost:3602/v1.0/invoke/whatifapi/method" });
+// });
 
 builder.Services.AddActors(config => {
     config.Actors.RegisterActor<PairActor>();
@@ -66,8 +66,8 @@ var app = builder.Build();
 app.UseCors(allowDaprForSwagger);
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    //app.UseSwagger();
+    //app.UseSwaggerUI();
 }
 app.UseRouting();
 

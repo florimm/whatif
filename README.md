@@ -15,14 +15,11 @@ The goals of this app are:
 
 
 ## Running the app
-* Command to run API (from the whatif.api folder replase --components-path with your path):
-    ```dapr run --app-id whatifapi --app-port 5178 --dapr-http-port 3602 --dapr-grpc-port 60002 --log-level Debug --components-path C:\projects\what-if\source\whatif.api\dapr\components dotnet run```
+* To run API, you need to have dapr cli and tye (https://github.com/dotnet/tye) installed:
+    ```tye run```
     
-* Command to run frontend (from the whatif.web folder):
-    ```yarn start``` or ```npm run start```
+* To run frontend, you must install packages with command ```yarn``` or ```npm i``` (from the whatif.web folder) then to start you run ```yarn start``` or ```npm run start```
 
 ## Testing endpoints
-* Accessing swagger:
-    ```http://localhost:5178/swagger/index.html```
 * Rest client in VsCode
-    - check file api.Rest in the api project
+    - check file api.Rest in the api project and change the ports to the one that the dapr sidecar has started with
